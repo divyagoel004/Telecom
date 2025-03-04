@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 import random
+import pandasql as sqldf
 import urllib.parse
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
@@ -130,10 +131,10 @@ Return ONLY the SQL code, no explanations.
     return sql_query
 
 def fetch_data(query):
-    data = df.copy()
-    data = data.query(query)
-    data = data[columns]
-    return data
+    return sqldf(sql_query, {'kpi': df})
+    except Exception as e:
+        st.error(f"Query Execution Error: {str(e)}")
+        return pd.DataFrame()
 
 # -------------------- Global Filter Options --------------------
 time_range_options = ["24h", "7d", "30d", "all", "custom"]
