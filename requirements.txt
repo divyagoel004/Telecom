@@ -1,0 +1,8 @@
+numpy==1.24.3
+pandas==1.5.3
+plotly==5.14.1
+streamlit==1.23.0
+SpeechRecognition==3.8.1
+SQLAlchemy==1.4.47
+python-dotenv==1.0.0
+streamlit-plotly-events==0.9.0
