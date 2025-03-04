@@ -26,8 +26,8 @@ try:
 except ImportError:
     st.warning("Groq and Together modules not found; voice-to-SQL features may not work.")
 
-password = 
-DB_USER="root
+
+DB_USER="root"
 DB_PASS=urllib.parse.quote_plus("Az@di1947")
 DB_HOST=localhost
 DB_NAME=new
