@@ -1,7 +1,8 @@
 numpy
 pandas
 plotly
-
+together
+groq
 streamlit
 streamlit_mic_recorder
 SQLAlchemy
