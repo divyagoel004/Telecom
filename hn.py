@@ -300,7 +300,7 @@ def update_churn(time_range, region_val, node_val, fiber_val,
     # df_kpi = filtered[filtered["kpi_name"] == "Churn Prediction & Retention Ratio"]
     if filtered.empty:
         return px.line(title="No data available for Churn Prediction")
-    fig = px.line(filtered, x="recorded_at", y="Customer_satisfaction_Score",
+    fig = px.line(filtered, x="recorded_at", y="Customer_Satisfaction_Score",
                      labels={"recorded_at": "Time", "kpi_value": "Churn/Retention (%)"})
     return fig
 def update_sla( time_range, region_val, node_val, fiber_val,
