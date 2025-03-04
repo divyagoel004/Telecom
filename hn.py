@@ -131,7 +131,8 @@ Return ONLY the SQL code, no explanations.
     return sql_query
 
 def fetch_data(query):
-    return sqldf(sql_query, {'kpi': df})
+    try:
+        return sqldf(sql_query, {'kpi': df})
     except Exception as e:
         st.error(f"Query Execution Error: {str(e)}")
         return pd.DataFrame()
