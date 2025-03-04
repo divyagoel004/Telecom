@@ -449,7 +449,7 @@ def get_technician_truck_analytics():
     return fig1, fig2, fig3
 
 # -------------------- Streamlit App Layout --------------------
-st.set_page_config(page_title="KPI Dashboard", layout="wide")
+# st.set_page_config(page_title="KPI Dashboard", layout="wide")
 st.markdown("<h1 style='text-align: center;'>Telecom Fiber Dashboard</h1>", unsafe_allow_html=True)
 
 # Global Filters at the top with reduced size
