@@ -26,8 +26,13 @@ try:
 except ImportError:
     st.warning("Groq and Together modules not found; voice-to-SQL features may not work.")
 
-password = urllib.parse.quote_plus("Az@di1947")
-DATABASE_URL = f"mysql+pymysql://root:{password}@localhost/new"
+password = 
+DB_USER="root
+DB_PASS=urllib.parse.quote_plus("Az@di1947")
+DB_HOST=localhost
+DB_NAME=new
+DATABASE_URL = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@{os.getenv('DB_HOST')}:3306/{os.getenv('DB_NAME')}"
+
 engine = create_engine(DATABASE_URL)
 
 GRAPH_TYPES = [
