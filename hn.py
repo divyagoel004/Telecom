@@ -11,8 +11,7 @@ from datetime import datetime, timedelta
 from streamlit_plotly_events import plotly_events
 from http.server import BaseHTTPRequestHandler
 import streamlit as st
-import streamlit.components.v1 as components
-
+from streamlit_mic_recorder import speech_to_text
 
 # -------------------- Environment & Data Setup --------------------
 load_dotenv()
@@ -77,63 +76,22 @@ def recognize_speech():
 
     st.title("Voice Input Without SpeechRecognition")
 
-    # Inline HTML/JS code for the voice input component
-    html_code = """
-<script src="https://unpkg.com/streamlit-component-lib@latest/dist/index.js"></script>
-<script>
-  // Check for browser support for SpeechRecognition
-  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    // Return a message if not supported
-    Streamlit.setComponentValue("Speech recognition is not supported in this browser.");
-  } else {
-    // Create a new SpeechRecognition object
-    var recognition = new SpeechRecognition();
-    recognition.lang = "en-US";       // Adjust language as needed
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    
-    recognition.onresult = function(event) {
-      // Get the transcribed text from the result
-      var transcript = event.results[0][0].transcript;
-      // Send the transcript back to Streamlit
-      Streamlit.setComponentValue(transcript);
-    };
+    if 'text' not in st.session_state:
+        st.session_state.text = None
 
-    recognition.onerror = function(event) {
-      Streamlit.setComponentValue("Error: " + event.error);
-    };
+# Voice input button
+    text = speech_to_text(
+        language='en',
+        use_container_width=True,
+        just_once=True,
+        key='STT'
+)
 
-    // Function to start speech recognition
-    function startVoice() {
-      recognition.start();
-    }
+# Update text if speech detected
+    if text:
+        st.session_state.text = text
 
-    // Create a button dynamically if it doesn't exist
-    if (!document.getElementById("voiceButton")) {
-      var btn = document.createElement("button");
-      btn.id = "voiceButton";
-      btn.style.fontSize = "16px";
-      btn.style.padding = "8px 16px";
-      btn.innerHTML = "Start Voice Input";
-      btn.onclick = startVoice;
-      document.body.appendChild(btn);
-    }
-  }
-</script>
-"""
-
-        # Render the custom component using components.html.
-    # The returned value from Streamlit.setComponentValue() will be captured in 'result'.
-    result = components.html(html_code, height=150, scrolling=False)
-
-    # Display the result
-    if result:
-        st.write("Voice input result:", result)
-        return result
-    else:
-        return "Click the button above and speak to see the result."
-
+    return st.session_state.text
 def generate_sql(query):
     schema = '''kpi(Fiber_Type, Cable_Length_km, Used_Fiber_Strands, Unused_Fiber_Strands,
       Installation_Date, Connector_Type, Patch_Panel_Type, Measurement_Time, Optical_Power_dBm, Optical_Loss_dB,
