@@ -28,9 +28,9 @@ except ImportError:
 
 
 
-username = "postgres"
-password = urllib.parse.quote_plus("Az@di1947")  # URL-encode special chars
-engine = create_engine(f"postgresql://{username}:{password}@localhost:5432/telecom")
+# username = "postgres"
+# password = urllib.parse.quote_plus("Az@di1947")  # URL-encode special chars
+# engine = create_engine(f"postgresql://{username}:{password}@localhost:5432/telecom")
 
 GRAPH_TYPES = [
     {"label": "Bar Chart", "value": "bar"},
@@ -47,12 +47,13 @@ GRAPH_TYPES = [
 
 # -------------------- Load Synthetic Data --------------------
 def transform_data(force=True):
-    """
-    Query KPI data from the database.
-    """
-    Q = "select * from kpi"
-    with engine.connect() as conn:
-        data = pd.read_sql(text(Q), conn)
+    # """
+    # Query KPI data from the database.
+    # """
+    # Q = "select * from kpi"
+    # with engine.connect() as conn:
+    #     data = pd.read_sql(text(Q), conn)
+    data=pd.read_csv("synthetic_fiber_data_with_truckroll.csv",parse_dates=['recorded_at']) 
     data['recorded_at'] = pd.to_datetime(data['recorded_at'])
     rows = 40000
     start_index = np.random.randint(0, rows - 100)
@@ -124,8 +125,10 @@ Return ONLY the SQL code, no explanations.
     return sql_query
 
 def fetch_data(query):
-    with engine.connect() as conn:
-        return pd.read_sql(text(query), conn)
+    data = df.copy()
+    data = data.query(query)
+    data = data[columns]
+    return data
 
 # -------------------- Global Filter Options --------------------
 time_range_options = ["24h", "7d", "30d", "all", "custom"]
