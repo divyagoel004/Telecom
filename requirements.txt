@@ -9,3 +9,4 @@ SQLAlchemy
 python-dotenv
 streamlit-plotly-events
 psycopg2-binary
+pandasql
