@@ -1,6 +1,7 @@
 numpy
 pandas
 plotly
+pyaudio
 streamlit
 SpeechRecognition
 SQLAlchemy
