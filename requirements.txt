@@ -1,9 +1,9 @@
 numpy
 pandas
 plotly
-PyAudio
+
 streamlit
-SpeechRecognition
+
 SQLAlchemy
 python-dotenv
 streamlit-plotly-events
