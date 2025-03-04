@@ -6,4 +6,4 @@ SpeechRecognition
 SQLAlchemy
 python-dotenv
 streamlit-plotly-events
-pymysql
+psycopg2
