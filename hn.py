@@ -72,9 +72,6 @@ def transform_data(force=True):
 df=transform_data()
 # -------------------- Voice-to-SQL Functions --------------------
 def recognize_speech():
-  
-
-    st.title("Voice Input Without SpeechRecognition")
 
     if 'text' not in st.session_state:
         st.session_state.text = None
@@ -91,7 +88,7 @@ def recognize_speech():
     if text:
         st.session_state.text = text
 
-    return st.session_state.text
+    return text
 def generate_sql(query):
     schema = '''kpi(Fiber_Type, Cable_Length_km, Used_Fiber_Strands, Unused_Fiber_Strands,
       Installation_Date, Connector_Type, Patch_Panel_Type, Measurement_Time, Optical_Power_dBm, Optical_Loss_dB,
@@ -661,7 +658,6 @@ with tabs[4]:
         st.session_state.audio_data = pd.DataFrame()
     col1, col2 = st.columns([1, 3])
     with col1:
-        if st.button("🎤 Start Recording"):
             st.session_state.transcript = recognize_speech()
     with col2:
         transcript = st.text_area("Transcript", value=st.session_state.get('transcript', ''))
