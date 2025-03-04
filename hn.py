@@ -131,8 +131,28 @@ Return ONLY the SQL code, no explanations.
     return sql_query
 
 def fetch_data(query):
+    """Execute SQL query on the DataFrame with validation"""
     try:
-        return sqldf(sql_query, {'kpi': df})
+        # Validate query first
+        if any(kw in sql_query.lower() for kw in ['insert', 'update', 'delete', 'drop']):
+            raise ValueError("Invalid query - contains dangerous operations")
+            
+        # Show the actual query being executed
+        st.write("Executing Query:", sql_query)
+        
+        # Get list of valid columns
+        valid_columns = df.columns.tolist()
+        st.write("Available Columns:", valid_columns)
+        
+        # Execute query
+        result = sqldf(sql_query, {'kpi': df})
+        
+        # Validate results
+        if not isinstance(result, pd.DataFrame):
+            raise ValueError("Query did not return a valid DataFrame")
+            
+        return result
+        
     except Exception as e:
         st.error(f"Query Execution Error: {str(e)}")
         return pd.DataFrame()
@@ -652,36 +672,57 @@ with tabs[3]:
 
 # -------------------- Voice SQL Dashboard Tab --------------------
 with tabs[4]:
-    st.header("Voice SQL Dashboard")
-   
-
     
+    st.header("Voice SQL Dashboard")
+    
+    # Initialize session states
     if 'audio_data' not in st.session_state:
         st.session_state.audio_data = pd.DataFrame()
+    if 'transcript' not in st.session_state:
+        st.session_state.transcript = ""
+    
+    # Voice input section
     col1, col2 = st.columns([1, 3])
     with col1:
             st.session_state.transcript = recognize_speech()
     with col2:
-        transcript = st.text_area("Transcript", value=st.session_state.get('transcript', ''))
+        transcript = st.text_area("Transcript", value=st.session_state.transcript)
+    
+    # Query execution
     if st.button("Extract Data"):
-        if st.session_state.get('transcript') and "Could not recognize" not in st.session_state.get('transcript'):
-            try:
+        if st.session_state.transcript:
+            with st.spinner("Generating SQL..."):
                 sql_query = generate_sql(st.session_state.transcript)
-                st.session_state.audio_data = fetch_data(sql_query)
-            except Exception as e:
-                st.error(f"SQL Error: {str(e)}")
+                
+            if sql_query:
+                with st.spinner("Executing Query..."):
+                    st.session_state.audio_data = fetch_data(sql_query)
+                
+    # Display results
     if not st.session_state.audio_data.empty:
         st.subheader("Query Results")
         st.dataframe(st.session_state.audio_data)
+        
+        # Visualization controls
         st.subheader("Visualization")
         cols = st.session_state.audio_data.columns.tolist()
+        
         col1, col2, col3 = st.columns(3)
-        x_axis = col1.selectbox("X Axis", options=cols, index=0)
-        y_axis = col2.selectbox("Y Axis", options=cols, index=1 if len(cols) > 1 else 0)
-        plot_type = col3.selectbox("Plot Type", GRAPH_TYPES, format_func=lambda x: x['label'])
+        with col1:
+            x_axis = st.selectbox("X Axis", options=cols, index=0)
+        with col2:
+            y_axis = st.selectbox("Y Axis", options=cols, index=min(1, len(cols)-1))
+        with col3:
+            plot_type = st.selectbox("Plot Type", GRAPH_TYPES, format_func=lambda x: x['label'])
+        
         if st.button("Generate Plot"):
             try:
-                fig = getattr(px, plot_type['value'])(st.session_state.audio_data, x=x_axis, y=y_axis)
-                st.plotly_chart(fig, use_container_width=True, height=300, key="plotly_voice_plot")
+                fig = getattr(px, plot_type['value'])(
+                    st.session_state.audio_data,
+                    x=x_axis,
+                    y=y_axis,
+                    title=f"{plot_type['label']} of {y_axis} vs {x_axis}"
+                )
+                st.plotly_chart(fig, use_container_width=True)
             except Exception as e:
                 st.error(f"Plotting Error: {str(e)}")
