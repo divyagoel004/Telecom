@@ -27,13 +27,10 @@ except ImportError:
     st.warning("Groq and Together modules not found; voice-to-SQL features may not work.")
 
 
-DB_USER="root"
-DB_PASS=urllib.parse.quote_plus("Az@di1947")
-DB_HOST="localhost"
-DB_NAME="new"
-DATABASE_URL = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@{os.getenv('DB_HOST')}:3306/{os.getenv('DB_NAME')}"
 
-engine = create_engine(DATABASE_URL)
+username = "postgres"
+password = urllib.parse.quote_plus("Az@di1947")  # URL-encode special chars
+engine = create_engine(f"postgresql://{username}:{password}@localhost:5432/telecom")
 
 GRAPH_TYPES = [
     {"label": "Bar Chart", "value": "bar"},
