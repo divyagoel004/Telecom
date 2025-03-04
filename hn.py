@@ -4,7 +4,6 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 import random
-
 import urllib.parse
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
