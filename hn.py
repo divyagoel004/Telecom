@@ -266,10 +266,10 @@ def update_uptime(time_range, region_val, node_val, fiber_val,
                   issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
-    df_kpi = filtered[filtered["kpi_name"] == "%Uptime / Performance"]
+    # df_kpi = filtered[filtered["kpi_name"] == "%Uptime / Performance"]
     if filtered.empty:
         return px.area(title="No data available for Uptime")
-    fig = px.area(df_kpi, x="recorded_at", y="kpi_value",
+    fig = px.histogram(filtered, x="recorded_at", y="ONT_OLT_Signal_Strength",
                   labels={"recorded_at": "Time", "Uptime": "Uptime (%)"})
     return fig
 
@@ -297,10 +297,10 @@ def update_churn(time_range, region_val, node_val, fiber_val,
                  issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
-    df_kpi = filtered[filtered["kpi_name"] == "Churn Prediction & Retention Ratio"]
+    # df_kpi = filtered[filtered["kpi_name"] == "Churn Prediction & Retention Ratio"]
     if filtered.empty:
         return px.line(title="No data available for Churn Prediction")
-    fig = px.line(df_kpi, x="recorded_at", y="kpi_value",
+    fig = px.line(filtered, x="recorded_at", y="Customer_satisfaction_Score",
                      labels={"recorded_at": "Time", "kpi_value": "Churn/Retention (%)"})
     return fig
 def update_sla( time_range, region_val, node_val, fiber_val,
