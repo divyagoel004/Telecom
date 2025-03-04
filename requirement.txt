@@ -1,0 +1,8 @@
+numpy
+pandas
+plotly
+streamlit
+SpeechRecognition
+SQLAlchemy
+python-dotenv
+streamlit-plotly-events
