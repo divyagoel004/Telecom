@@ -287,6 +287,7 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
     if filtered.empty:
         fig = go.Figure()
         fig.update_layout(title="No data available for Fiber Utilization Rate")
+        return fig
     fig = px.line(filtered, x="recorded_at", y="Fiber_Utilization",
                        labels={"recorded_at": "Time", "Fiber_Utilization_Rate": "Utilization (%)"})
     fig.update_traces(marker=dict(color='#ff7f0e'))
@@ -297,7 +298,9 @@ def update_packet_loss(time_range, region_val, node_val, fiber_val,
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
-        return px.scatter(title="No data available for Packet Loss Percentage")
+        fig = go.Figure()
+        fig.update_layout(title="No data available")
+        return fig
     fig = px.bar(filtered, x="recorded_at", y="Packet_Loss_Percent",
                      labels={"recorded_at": "Time", "Packet_Loss_Percent": "Packet Loss (%)"})
     fig.update_traces(marker=dict(color='#ff7f0e'))
@@ -308,7 +311,9 @@ def update_latency(time_range, region_val, node_val, fiber_val,
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
-        return px.area(title="No data available for Latency Trends")
+        fig = go.Figure()
+        fig.update_layout(title="No data available")
+        return fig
     fig = px.line(filtered, x="recorded_at", y="Latency_ms",
                   labels={"recorded_at": "Time", "Latency_ms": "Latency (ms)"})
     fig.update_traces(line=dict(color='#2ca02c'))
@@ -319,7 +324,9 @@ def update_signal(time_range, region_val, node_val, fiber_val,
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
-        return px.area(title="No data available for Signal Strength & Noise Ratio")
+        fig = go.Figure()
+        fig.update_layout(title="No data available")
+        return fig
 
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
@@ -363,7 +370,9 @@ def update_uptime(time_range, region_val, node_val, fiber_val,
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
-        return px.area(title="No data available for Uptime")
+        fig = go.Figure()
+        fig.update_layout(title="No data available")
+        return fig
     
     # Compute average uptime from the filtered DataFrame
     avg_uptime = filtered['Uptime_Performance'].mean()
@@ -395,7 +404,9 @@ def update_bandwidth( time_range, region_val, node_val, fiber_val,
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
-        return px.line(title="No data available for Bandwidth")
+        fig = go.Figure()
+        fig.update_layout(title="No data available")
+        return fig
     title_text = "Signal Strength & Noise Ratio" 
     fig = px.histogram(filtered, x="recorded_at", y="Bandwidth_Gbps",
                       title=title_text,
@@ -407,7 +418,9 @@ def update_complaint(time_range, region_val, node_val, fiber_val,
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
-        return px.area(title="No data available for Complaint Resolution Time")
+        fig = go.Figure()
+        fig.update_layout(title="No data available")
+        return fig
     fig = px.bar(filtered, x="recorded_at", y="Complaint_Resolution_Time",
                   labels={"recorded_at": "Time", "Complaint_Resolution_Time": "Resolution Time (min)"})
     fig.update_traces(marker=dict(color='#8c564b'))
@@ -418,7 +431,9 @@ def update_csat(time_range, region_val, node_val, fiber_val,
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
-        return px.line(title="No data available for CSAT")
+        fig = go.Figure()
+        fig.update_layout(title="No data available")
+        return fig
     fig = px.histogram(filtered, x="recorded_at", y="Customer_Satisfaction_Score",
                   labels={"recorded_at": "Time", "Customer_Satisfaction_Score": "CSAT Score"})
     fig.update_traces(marker=dict(color='#e377c2'))
@@ -430,7 +445,9 @@ def update_churn(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     # df_kpi = filtered[filtered["kpi_name"] == "Churn Prediction & Retention Ratio"]
     if filtered.empty:
-        return px.line(title="No data available for Churn Prediction")
+        fig = go.Figure()
+        fig.update_layout(title="No data available")
+        return fig
     fig = px.line(filtered, x="recorded_at", y="Customer_Churn_Rate",
                      labels={"recorded_at": "Time", "Customer_Churn_Rate": "Churn/Retention (%)"})
     fig.update_traces(line=dict(color='#7f7f7f'))
@@ -440,7 +457,9 @@ def update_sla( time_range, region_val, node_val, fiber_val,
         filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                 issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
         if filtered.empty:
-            return px.line(title="No data available for Churn Prediction")
+            fig = go.Figure()
+            fig.update_layout(title="No data available")
+            return fig
         fig = px.bar(filtered, x="recorded_at", y="SLA_Priority",
                         labels={"recorded_at": "Time", "kpi_value": "Service Level Agreement"})
         return fig
@@ -449,7 +468,9 @@ def update_firstfix( time_range, region_val, node_val, fiber_val,
         filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                 issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
         if filtered.empty:
-            return px.line(title="No data available for Churn Prediction")
+            fig = go.Figure()
+            fig.update_layout(title="No data available")
+            return fig
         fig = px.line(filtered, x="recorded_at", y="First_Fix_Rate",
                         
                         labels={"recorded_at": "Time", "First_Fix_Rate": "First_Fix_Rate"})
@@ -460,7 +481,9 @@ def update_callcenter( time_range, region_val, node_val, fiber_val,
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
-            return px.line(title="No data available for Churn Prediction")
+        fig = go.Figure()
+        fig.update_layout(title="No data available")
+        return fig
     fig = px.line(filtered, x="recorded_at", y="Complaint_Resolution_Time",
                       labels={"recorded_at": "Time", "kpi_value": "Call-Center Resolution Time"})
     fig.update_traces(line=dict(color='#d62728'))
@@ -470,7 +493,9 @@ def update_selfservice( time_range, region_val, node_val, fiber_val,
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
-            return px.line(title="No data available for Churn Prediction")
+        fig = go.Figure()
+        fig.update_layout(title="No data available")
+        return fig
     fig = px.bar(filtered, x="recorded_at", y="Self_Service_Resolution",
                       
                       labels={"recorded_at": "Time", "Self_Service_Resolution": "Self - Service Resolution Time"})
@@ -481,7 +506,9 @@ def update_efficiency( time_range, region_val, node_val, fiber_val,
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
-            return px.line(title="No data available for Churn Prediction")
+        fig = go.Figure()
+        fig.update_layout(title="No data available")
+        return fig
     fig = px.bar(filtered, x="recorded_at", y="Technical_Efficiency",
                       labels={"recorded_at": "Time", "Technical_Efficiency": "Efficiency Rate"})
     fig.update_traces(marker=dict(color='#2ca02c'))
@@ -492,7 +519,9 @@ def update_ticketclosure( time_range, region_val, node_val, fiber_val,
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
-            return px.line(title="No data available for Churn Prediction")
+        fig = go.Figure()
+        fig.update_layout(title="No data available")
+        return fig
     fig = px.line(filtered, x="recorded_at", y="Ticket_Closure_Rate",
                       labels={"recorded_at": "Time", "Ticket_Closure_Rate": "Closure Rate "})
     return fig
@@ -501,7 +530,9 @@ def update_planned(time_range, region_val, node_val, fiber_val,
         filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                 issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
         if filtered.empty:
-            return px.line(title="No data available for Churn Prediction")
+            fig = go.Figure()
+            fig.update_layout(title="No data available")
+            return fig
         maintenance_counts = filtered['Maintenance_Type'].value_counts().reset_index()
         maintenance_counts.columns = ['Maintenance_Type', 'Count']
         fig = px.pie(
