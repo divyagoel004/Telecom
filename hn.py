@@ -257,19 +257,19 @@ def generate_overview_cards(filtered):
     # KPI: Truck Rolls (categorical: Truck_Roll_Decision)
     with col2:
         # Use the Truck_Roll_Decision column if it exists; otherwise, map from Truck_Roll_Requirement
-        
-        if st.button("Apply for Truck Rolls", key="truck_card"):
-            if "Truck_Roll_Decision" in filtered.columns:
+        if "Truck_Roll_Decision" in filtered.columns:
                 truck_options = list(filtered["Truck_Roll_Decision"].unique())
-            else:
+        else:
                 truck_options = list(
                     filtered["Truck_Roll_Requirement"]
                     .map(lambda x: "Required" if x == "required" else "Not Required")
                     .unique()
                 )
-            selected_truck = st.multiselect(
+        selected_truck = st.multiselect(
                 "Select Truck Roll Decisions", options=truck_options, default=["Required"]
                 )
+        if st.button("Apply for Truck Rolls", key="truck_card"):
+            
             st.session_state.selected_card = {
                 "type": "truck",
                 "filters": {"Truck_Roll_Decision": selected_truck}
@@ -298,6 +298,7 @@ def generate_overview_cards(filtered):
 
 def show_card_details(selected_card):
     filtered_data = st.session_state.full_filtered_data.copy()
+    filters = selected_card.get("filters", {})
     for key, value in selected_card["filters"].items():
         if isinstance(value, list):
             filtered_data = filtered_data[filtered_data[key].isin(value)]
