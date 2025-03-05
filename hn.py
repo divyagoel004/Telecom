@@ -255,12 +255,13 @@ def generate_overview_cards(filtered):
     # KPI: Critical Fiber Issues (categorical: Issue_Type)
     with col1:
         # Build dropdown options from the unique values in the Issue_Type column
-        issue_options = sorted(filtered["Issue_Type"].unique())
-        # Set default to all available issues (or choose a subset if desired)
-        selected_issues = st.multiselect(
-            "Select Issue Types", options=issue_options
-        )
+        
         if st.button("Apply for Critical Fiber Issues", key="critical_card"):
+            issue_options = sorted(filtered["Issue_Type"].unique())
+        # Set default to all available issues (or choose a subset if desired)
+            selected_issues = st.multiselect(
+            "Select Issue Types", options=issue_options
+            )
             st.session_state.selected_card = {
                 "type": "critical",
                 "filters": {"Issue_Type": selected_issues}
