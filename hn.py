@@ -256,7 +256,7 @@ def generate_overview_cards(filtered):
     with col1:
     # Get ALL possible issue types from original data (not filtered)
     # Assuming you have access to original data - adjust this to your actual data source
-        all_issues = sorted(st.session_state.original_data["Issue_Type"].unique())  # Use your full dataset
+        all_issues = sorted(st.session_state.filtered["Issue_Type"].unique())  # Use your full dataset
     
     # Persistent selection using session state
         if 'selected_issues' not in st.session_state:
@@ -282,8 +282,8 @@ def generate_overview_cards(filtered):
 
     with col2:
     # Get ALL possible truck roll options
-        if "Truck_Roll_Decision" in st.session_state.original_data.columns:
-            all_truck_ops = sorted(st.session_state.original_data["Truck_Roll_Decision"].unique())
+        if "Truck_Roll_Decision" in st.session_state.filtered.columns:
+            all_truck_ops = sorted(st.session_state.filtered["Truck_Roll_Decision"].unique())
         else:
             all_truck_ops = sorted(st.session_state.original_data["Truck_Roll_Requirement"]
                             .map(lambda x: "Required" if x == "required" else "Not Required")
