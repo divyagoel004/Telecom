@@ -112,11 +112,9 @@ def generate_sql(query):
        weather_id, service_id, truck_roll, kpi_name, kpi_value,
        Time_Range.1, Geographic_Region.1, Network_Node_Type.1,
        Issue_Type.1, Technician_Skill_Level.1, Customer_SLA_Priority.1,
-       Truck_Roll_Decision.1)'''
-    system_prompt = f"""
-You are a SQL expert. Convert the following natural language query into a SQL statement.
-When filtering on categorical columns, ensure that only the following allowed values are used:
-- Fiber_Type: ['Single-mode', 'Multi-mode', 'Aerial', 'Underground']
+       Truck_Roll_Decision.1)
+values for categorical columns in this schema 
+Fiber_Type: ['Single-mode', 'Multi-mode', 'Aerial', 'Underground']
 - Connector_Type: ['SC', 'LC', 'ST']
 - Patch_Panel_Type: ['Patch_A', 'Patch_B', 'Patch_C']
 - Data_Rate_Unit: ['Mbps', 'Gbps']
@@ -143,7 +141,10 @@ When filtering on categorical columns, ensure that only the following allowed va
 - Issue_Type: ['Signal Degradation', 'Fiber Break', 'Power Outage', 'Equipment Failure']
 - Technician_Skill_Level: ['Splicer', 'Network Engineer', 'ONT/OLT Specialist']
 - Customer_SLA_Priority: ['Enterprise', 'Residential', 'Government']
-- Truck_Roll_Decision: ['Required', 'Not Required']
+- Truck_Roll_Decision: ['Required', 'Not Required']'''
+    system_prompt = f"""
+You are a SQL expert. Convert the following natural language query into a SQL statement.
+When filtering on categorical columns, ensure that only the following allowed values are used:
 
 Use this schema: {schema}.
 Return ONLY the SQL code, no explanations.
@@ -725,7 +726,7 @@ with tabs[4]:
     st.session_state.transcript="installation date and resolution date"
     # Query execution
     if st.button("Extract Data"):
-        # if st.session_state.transcript:
+         if st.session_state.transcript:
             with st.spinner("Generating SQL..."):
                 sql_query = generate_sql(st.session_state.transcript)
             if sql_query:
