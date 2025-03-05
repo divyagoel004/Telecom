@@ -297,8 +297,12 @@ def generate_overview_cards(filtered):
 def show_card_details(selected_card):
     filtered_data = st.session_state.full_filtered_data.copy()
     for key, value in selected_card["filters"].items():
-        if callable(value):
+        if isinstance(value, list):
+            filtered_data = filtered_data[filtered_data[key].isin(value)]
+        # If the filter value is a callable (e.g., lambda), apply it to each element
+        elif callable(value):
             filtered_data = filtered_data[filtered_data[key].apply(value)]
+        # Otherwise, use simple equality
         else:
             filtered_data = filtered_data[filtered_data[key] == value]
     with st.expander(f"🔍 {selected_card['type'].capitalize()} Details", expanded=True):
