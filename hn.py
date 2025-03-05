@@ -239,62 +239,21 @@ def generate_overview_cards(filtered):
     st.session_state.full_filtered_data = filtered
     
     col1, col2, col3, col4 = st.columns(4)
-    
-    # KPI: Critical Fiber Issues (categorical: Issue_Type)
     with col1:
-        # Build dropdown options from the unique values in the Issue_Type column
-        issue_options = list(filtered["Issue_Type"].unique())
-        # Set default to all available issues (or choose a subset if desired)
-        selected_issues = st.multiselect(
-            "Select Issue Types", options=issue_options, default=issue_options
-        )
-        if st.button("Apply for Critical Fiber Issues", key="critical_card"):
-            st.session_state.selected_card = {
-                "type": "critical",
-                "filters": {"Issue_Type": selected_issues}
-            }
-    
-    # KPI: Truck Rolls (categorical: Truck_Roll_Decision)
+        if st.button("🚨 Critical Fiber Issues", key="critical_card"):
+            st.session_state.selected_card = {"type": "critical", "filters": {"Issue_Type": "Fiber Break"}}
     with col2:
-        # Use the Truck_Roll_Decision column if it exists; otherwise, map from Truck_Roll_Requirement
-        if "Truck_Roll_Decision" in filtered.columns:
-                truck_options = list(filtered["Truck_Roll_Decision"].unique())
-        else:
-                truck_options = list(
-                    filtered["Truck_Roll_Requirement"]
-                    .map(lambda x: "Required" if x == "required" else "Not Required")
-                    .unique()
-                )
-        selected_truck = st.multiselect(
-                "Select Truck Roll Decisions", options=truck_options, default=["Required"]
-                )
-        if st.button("Apply for Truck Rolls", key="truck_card"):
-            
-            st.session_state.selected_card = {
-                "type": "truck",
-                "filters": {"Truck_Roll_Decision": selected_truck}
-            }
-    
-    # KPI: Healthy Connections (numeric filter, so no dropdown is added)
+        if st.button("🚚 Truck Rolls", key="truck_card"):
+            st.session_state.selected_card = {"type": "truck", "filters": {"Truck_Roll_Decision": "Required"}}
     with col3:
         if st.button("📡 Healthy Connections", key="healthy_card"):
-            st.session_state.selected_card = {
-                "type": "healthy",
-                "filters": {"Data_Transmission_Rate": lambda x: x >= 95}
-            }
-    
-    # KPI: Pending Maintenance (numeric filter, so no dropdown is added)
+            st.session_state.selected_card = {"type": "healthy", "filters": {"Data_Transmission_Rate": lambda x: x >= 95}}
     with col4:
         if st.button("🔧 Pending Maintenance", key="pending_card"):
-            st.session_state.selected_card = {
-                "type": "pending",
-                "filters": {"Historical_Maintenance_Frequency": lambda x: x > 5}
-            }
+            st.session_state.selected_card = {"type": "pending", "filters": {"Historical_Maintenance_Frequency": lambda x: x > 5}}
     
-    # If any card has been selected, call the drill-down function.
     if "selected_card" in st.session_state:
         show_card_details(st.session_state.selected_card)
-
 
 def show_card_details(selected_card):
     filtered_data = st.session_state.full_filtered_data.copy()
