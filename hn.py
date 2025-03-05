@@ -491,7 +491,7 @@ def update_planned(time_range, region_val, node_val, fiber_val,
         if filtered.empty:
             return px.line(title="No data available for Churn Prediction")
         maintenance_counts = filtered['Maintenance_Type'].value_counts().reset_index()
-        maintenance_counts.columns = ['Maintenance_Type', 'Count'])
+        maintenance_counts.columns = ['Maintenance_Type', 'Count']
         fig = px.pie(
             maintenance_counts,
             names='Maintenance_Type',
