@@ -382,7 +382,7 @@ def update_uptime(time_range, region_val, node_val, fiber_val,
         }
     },
     hovertemplate="%{value:.2f}% Uptime_Performance"  # This sets custom hover info
-))
+    ))
     return fig
 def update_bandwidth( time_range, region_val, node_val, fiber_val,
                    issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
