@@ -19,27 +19,7 @@ st.set_page_config(
     page_title="KPI Dashboard",
     layout="wide"  
 )
-st.markdown(
-    """
-    <style>
-    /* Target the root element and set background color */
-    .stApp {
-        background-color: #000000;  /* Black */
-        color: #ffffff;  /* Optional: Set default text color to white */
-    }
 
-    /* Optional: Adjust other elements for consistency */
-    /* For example, headers, widgets, or containers */
-    h1, h2, h3, h4, h5, h6, p, .st-b8, .st-cm {
-        color: #ffffff !important;
-    }
-    .stDataFrame, .stPlotlyChart {
-    background-color: #000000 !important;
-}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 # -------------------- Environment & Data Setup --------------------
 load_dotenv()
