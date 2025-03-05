@@ -718,7 +718,7 @@ with tabs[4]:
             st.session_state.transcript = recognize_speech()
     with col2:
         transcript = st.text_area("Transcript", value=st.session_state.transcript)
-    
+    transcript="installation date and resolution date"
     # Query execution
     if st.button("Extract Data"):
         if st.session_state.transcript:
