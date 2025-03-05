@@ -15,7 +15,10 @@ import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from streamlit_mic_recorder import speech_to_text
-
+st.set_page_config(
+    page_title="KPI Dashboard",
+    layout="wide"  
+)
 # -------------------- Environment & Data Setup --------------------
 load_dotenv()
 os.environ["GROQ_API_KEY"] = "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"
