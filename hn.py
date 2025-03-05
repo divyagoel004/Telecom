@@ -286,7 +286,7 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
         return px.histogram(title="No data available for Fiber Utilization Rate")
-    fig = px.line(filtered, x="recorded_at", y="Fiber_Utilization",
+    fig = px.line(filtered, x="recorded_at", y="Fiber_Utilization",color='red',
                        labels={"recorded_at": "Time", "Fiber_Utilization_Rate": "Utilization (%)"})
     return fig
 
