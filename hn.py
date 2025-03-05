@@ -299,6 +299,7 @@ def update_packet_loss(time_range, region_val, node_val, fiber_val,
         return px.scatter(title="No data available for Packet Loss Percentage")
     fig = px.bar(filtered, x="recorded_at", y="Packet_Loss_Percent",
                      labels={"recorded_at": "Time", "Packet_Loss_Percent": "Packet Loss (%)"})
+    fig.update_traces(marker=dict(color='#ff7f0e'))
     return fig
 
 def update_latency(time_range, region_val, node_val, fiber_val,
@@ -309,6 +310,7 @@ def update_latency(time_range, region_val, node_val, fiber_val,
         return px.area(title="No data available for Latency Trends")
     fig = px.line(filtered, x="recorded_at", y="Latency_ms",
                   labels={"recorded_at": "Time", "Latency_ms": "Latency (ms)"})
+    fig.update_traces(line=dict(color='#2ca02c'))
     return fig
 
 def update_signal(time_range, region_val, node_val, fiber_val,
@@ -397,6 +399,7 @@ def update_bandwidth( time_range, region_val, node_val, fiber_val,
     fig = px.histogram(filtered, x="recorded_at", y="Bandwidth_Gbps",
                       title=title_text,
                       labels={"recorded_at": "Noise Ratio", "Bandwidth_Gbps": "Bandwidth_Gbps"})
+    fig.update_traces(marker=dict(color='#9467bd'))
     return fig
 def update_complaint(time_range, region_val, node_val, fiber_val,
                      issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -406,6 +409,7 @@ def update_complaint(time_range, region_val, node_val, fiber_val,
         return px.area(title="No data available for Complaint Resolution Time")
     fig = px.bar(filtered, x="recorded_at", y="Complaint_Resolution_Time",
                   labels={"recorded_at": "Time", "Complaint_Resolution_Time": "Resolution Time (min)"})
+    fig.update_traces(marker=dict(color='#8c564b'))
     return fig
 
 def update_csat(time_range, region_val, node_val, fiber_val,
@@ -416,6 +420,7 @@ def update_csat(time_range, region_val, node_val, fiber_val,
         return px.line(title="No data available for CSAT")
     fig = px.histogram(filtered, x="recorded_at", y="Customer_Satisfaction_Score",
                   labels={"recorded_at": "Time", "Customer_Satisfaction_Score": "CSAT Score"})
+    fig.update_traces(marker=dict(color='#e377c2'))
     return fig
 
 def update_churn(time_range, region_val, node_val, fiber_val,
@@ -427,6 +432,7 @@ def update_churn(time_range, region_val, node_val, fiber_val,
         return px.line(title="No data available for Churn Prediction")
     fig = px.line(filtered, x="recorded_at", y="Customer_Churn_Rate",
                      labels={"recorded_at": "Time", "Customer_Churn_Rate": "Churn/Retention (%)"})
+    fig.update_traces(line=dict(color='#7f7f7f'))
     return fig
 def update_sla( time_range, region_val, node_val, fiber_val,
                     issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -446,6 +452,7 @@ def update_firstfix( time_range, region_val, node_val, fiber_val,
         fig = px.line(filtered, x="recorded_at", y="First_Fix_Rate",
                         
                         labels={"recorded_at": "Time", "First_Fix_Rate": "First_Fix_Rate"})
+        fig.update_traces(marker=dict(color='#bcbd22'))
         return fig
 def update_callcenter( time_range, region_val, node_val, fiber_val,
                    issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -455,6 +462,7 @@ def update_callcenter( time_range, region_val, node_val, fiber_val,
             return px.line(title="No data available for Churn Prediction")
     fig = px.line(filtered, x="recorded_at", y="Complaint_Resolution_Time",
                       labels={"recorded_at": "Time", "kpi_value": "Call-Center Resolution Time"})
+    fig.update_traces(line=dict(color='#d62728'))
     return fig
 def update_selfservice( time_range, region_val, node_val, fiber_val,
                    issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -465,6 +473,7 @@ def update_selfservice( time_range, region_val, node_val, fiber_val,
     fig = px.bar(filtered, x="recorded_at", y="Self_Service_Resolution",
                       
                       labels={"recorded_at": "Time", "Self_Service_Resolution": "Self - Service Resolution Time"})
+    fig.update_traces(marker=dict(color='#ff7f0e'))
     return fig
 def update_efficiency( time_range, region_val, node_val, fiber_val,
                    issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -474,6 +483,7 @@ def update_efficiency( time_range, region_val, node_val, fiber_val,
             return px.line(title="No data available for Churn Prediction")
     fig = px.bar(filtered, x="recorded_at", y="Technical_Efficiency",
                       labels={"recorded_at": "Time", "Technical_Efficiency": "Efficiency Rate"})
+    fig.update_traces(marker=dict(color='#2ca02c'))
     return fig
 
 def update_ticketclosure( time_range, region_val, node_val, fiber_val,
@@ -498,6 +508,7 @@ def update_planned(time_range, region_val, node_val, fiber_val,
             names='Maintenance_Type',
             values='Count',
             title='Maintenance Type Distribution'
+            color_discrete_sequence=['#1f77b4', '#ff7f0e']
     )
         return fig
 
