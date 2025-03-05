@@ -247,7 +247,7 @@ def generate_overview_cards(filtered):
             st.session_state.selected_card = {"type": "truck", "filters": {"Truck_Roll_Decision": "Required"}}
     with col3:
         if st.button("📡 Healthy Connections", key="healthy_card"):
-            st.session_state.selected_card = {"type": "healthy", "filters": {"Uptime": lambda x: x >= 95}}
+            st.session_state.selected_card = {"type": "healthy", "filters": {"Data_Transmission_Rate": lambda x: x >= 95}}
     with col4:
         if st.button("🔧 Pending Maintenance", key="pending_card"):
             st.session_state.selected_card = {"type": "pending", "filters": {"Historical_Maintenance_Frequency": lambda x: x > 5}}
