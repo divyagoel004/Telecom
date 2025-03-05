@@ -148,13 +148,17 @@ When filtering on categorical columns, ensure that only the following allowed va
 Use this schema: {schema}.
 Return ONLY the SQL code, no explanations.
 """ 
-    response = together_client.chat.completions.create(
-        model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    client = Groq(
+    api_key=os.environ.get("GROQ_API_KEY"))
+
+    response = client.chat.completions.create(
         messages=[
+        {
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": query},
-        ],
-        temperature=0.1
+        }
+    ],
+    model="llama-3.3-70b-versatile",
     )
     sql_query = response.choices[0].message.content.replace("```sql", "").replace("```", "").strip()
     st.write("Extract Data:", sql_query)
