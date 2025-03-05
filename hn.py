@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 from streamlit_plotly_events import plotly_events
 from http.server import BaseHTTPRequestHandler
 import streamlit as st
+import pytz
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from streamlit_mic_recorder import speech_to_text
@@ -67,7 +68,8 @@ def transform_data(force=True):
     subset_index = range(start_index, start_index + 100)
 
     # Generate 100 random timestamps within the last 24 hours.
-    now = datetime.now()
+    india_tz = pytz.timezone('Asia/Kolkata')
+    now = datetime.now(india_tz)
     start_time = now - timedelta(hours=30)
     start_ts = int(start_time.timestamp())
     end_ts = int(now.timestamp())
