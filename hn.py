@@ -210,19 +210,19 @@ def get_filtered_df(time_range, region_val, node_val, fiber_val, issue_val,
     now = filtered["recorded_at"].max()
     if time_range != "all":
         if time_range == "60 Min":
-            cutoff = now - timedelta(minute=60)
+            cutoff = now - timedelta(minutes=60)
             filtered = filtered[filtered["recorded_at"] >= cutoff]
         elif time_range == "30 Min":
-            cutoff = now - timedelta(minute=30)
+            cutoff = now - timedelta(minutes=30)
             filtered = filtered[filtered["recorded_at"] >= cutoff]
         elif time_range == "20 Min":
-            cutoff = now - timedelta(minute=20)
+            cutoff = now - timedelta(minutes=20)
             filtered = filtered[filtered["recorded_at"] >= cutoff]
         elif time_range == "15 Min":
-            cutoff = now - timedelta(minute=15)
+            cutoff = now - timedelta(minutes=15)
             filtered = filtered[filtered["recorded_at"] >= cutoff]
         elif time_range == "10 Min":
-            cutoff = now - timedelta(minute=10)
+            cutoff = now - timedelta(minutes=10)
             filtered = filtered[filtered["recorded_at"] >= cutoff]
     if region_val:
         filtered = filtered[filtered["Geographic_Region"].isin(region_val)]
