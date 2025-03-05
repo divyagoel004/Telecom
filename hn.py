@@ -721,14 +721,12 @@ with tabs[4]:
     transcript="installation date and resolution date"
     # Query execution
     if st.button("Extract Data"):
-        if st.session_state.transcript:
+        # if st.session_state.transcript:
             with st.spinner("Generating SQL..."):
                 sql_query = generate_sql(st.session_state.transcript)
             if sql_query:
                 with st.spinner("Executing Query..."):
                     st.session_state.audio_data = fetch_data(sql_query)
-        else: 
-            st.write("Hi")
                 
             
             
