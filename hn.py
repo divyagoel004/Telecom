@@ -254,39 +254,59 @@ def generate_overview_cards(filtered):
     
     # KPI: Critical Fiber Issues (categorical: Issue_Type)
     with col1:
-        # Build dropdown options from the unique values in the Issue_Type column
+    # Get ALL possible issue types from original data (not filtered)
+    # Assuming you have access to original data - adjust this to your actual data source
+        all_issues = sorted(st.session_state.original_data["Issue_Type"].unique())  # Use your full dataset
+    
+    # Persistent selection using session state
+        if 'selected_issues' not in st.session_state:
+            st.session_state.selected_issues = all_issues
         
+    # Always show multiselect with all options
+        selected_issues = st.multiselect(
+                "Select Issue Types", 
+                options=all_issues,  # Show all possible options
+            default=st.session_state.selected_issues,
+            key="issue_selector"
+        )
+    
         if st.button("Apply for Critical Fiber Issues", key="critical_card"):
-            issue_options = sorted(filtered["Issue_Type"].unique())
-        # Set default to all available issues (or choose a subset if desired)
-            selected_issues = st.multiselect(
-            "Select Issue Types", options=issue_options
-            )
+        # Store selection even if no current matches
+            st.session_state.selected_issues = selected_issues
+        
+        # Apply filter (will show empty if no matches)
             st.session_state.selected_card = {
                 "type": "critical",
                 "filters": {"Issue_Type": selected_issues}
             }
-    
-    # KPI: Truck Rolls (categorical: Truck_Roll_Decision)
+
     with col2:
+    # Get ALL possible truck roll options
+        if "Truck_Roll_Decision" in st.session_state.original_data.columns:
+            all_truck_ops = sorted(st.session_state.original_data["Truck_Roll_Decision"].unique())
+        else:
+            all_truck_ops = sorted(st.session_state.original_data["Truck_Roll_Requirement"]
+                            .map(lambda x: "Required" if x == "required" else "Not Required")
+                            .unique())
+    
+    # Persistent selection
+        if 'selected_truck' not in st.session_state:
+            st.session_state.selected_truck = all_truck_ops
         
-        if st.button("Apply for Truck Rolls", key="truck_card"):
-            if "Truck_Roll_Decision" in filtered.columns:
-                truck_options = sorted(filtered["Truck_Roll_Decision"].unique())
-            else:
-                truck_options = list(
-                    filtered["Truck_Roll_Requirement"]
-                .map(lambda x: "Required" if x == "required" else "Not Required")
-                .unique()
-            )
-            # Default to all options so user can narrow it down
-            selected_truck = st.multiselect(
-                "Select Truck Roll Decisions", options=truck_options, default=truck_options
+    # Always show multiselect
+        selected_truck = st.multiselect(
+                "Select Truck Roll Decisions", 
+                options=all_truck_ops,  # All possible options
+                default=st.session_state.selected_truck,
+            key="truck_selector"
         )
+    
+        if st.button("Apply for Truck Rolls", key="truck_card"):
+            st.session_state.selected_truck = selected_truck
             st.session_state.selected_card = {
-                "type": "truck",
-                "filters": {"Truck_Roll_Decision": selected_truck}
-            }
+                    "type": "truck",
+                    "filters": {"Truck_Roll_Decision": selected_truck}
+        }
     
     # KPI: Healthy Connections (numeric filter, so no dropdown is added)
     with col3:
