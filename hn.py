@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 import random
-import pandasql as sqldf
+from pandasql import sqldf
 import urllib.parse
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
@@ -172,12 +172,6 @@ def fetch_data(query):
         if any(kw in sql_query.lower() for kw in ['insert', 'update', 'delete', 'drop']):
             raise ValueError("Invalid query - contains dangerous operations")
             
-        # Show the actual query being executed
-        st.write("Executing Query:", sql_query)
-        
-        # Get list of valid columns
-        valid_columns = df.columns.tolist()
-        st.write("Available Columns:", valid_columns)
         
         # Execute query
         result = sqldf(sql_query, {'kpi': df})
