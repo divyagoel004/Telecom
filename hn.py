@@ -57,7 +57,7 @@ def transform_data(force=True):
     #     data = pd.read_sql(text(Q), conn)
     data=pd.read_csv("synthetic_fiber_data_with_truckroll.csv",parse_dates=['recorded_at']) 
     data['recorded_at'] = pd.to_datetime(data['recorded_at'])
-    rows = 40000
+    rows = 35000
     start_index = np.random.randint(0, rows - 100)
     subset_index = range(start_index, start_index + 100)
 
@@ -442,9 +442,9 @@ def update_firstfix( time_range, region_val, node_val, fiber_val,
                                 issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
         if filtered.empty:
             return px.line(title="No data available for Churn Prediction")
-        fig = px.line(filtered, x="recorded_at", y="Complaint_Resolution_Time",
+        fig = px.line(filtered, x="recorded_at", y="First_Fix_Rate",
                         
-                        labels={"recorded_at": "Time", "kpi_value": "Complaint_Resolution_Time"})
+                        labels={"recorded_at": "Time", "First_Fix_Rate": "First_Fix_Rate"})
         return fig
 def update_callcenter( time_range, region_val, node_val, fiber_val,
                    issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -461,9 +461,9 @@ def update_selfservice( time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
             return px.line(title="No data available for Churn Prediction")
-    fig = px.area(filtered, x="recorded_at", y="Customer_Satisfaction_Score",
+    fig = px.area(filtered, x="recorded_at", y="Self_Service_Resolution",
                       
-                      labels={"recorded_at": "Time", "kpi_value": "Self - Service Resolution Time"})
+                      labels={"recorded_at": "Time", "Self_Service_Resolution": "Self - Service Resolution Time"})
     return fig
 def update_efficiency( time_range, region_val, node_val, fiber_val,
                    issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -471,8 +471,8 @@ def update_efficiency( time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
             return px.line(title="No data available for Churn Prediction")
-    fig = px.line(filtered, x="recorded_at", y="Historical_Maintenance_Frequency",
-                      labels={"recorded_at": "Time", "kpi_value": "Efficiency Rate"})
+    fig = px.line(filtered, x="recorded_at", y="Technical_Efficiency",
+                      labels={"recorded_at": "Time", "Technical_Efficiency": "Efficiency Rate"})
     return fig
 
 def update_ticketclosure( time_range, region_val, node_val, fiber_val,
@@ -481,8 +481,8 @@ def update_ticketclosure( time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
             return px.line(title="No data available for Churn Prediction")
-    fig = px.line(filtered, x="recorded_at", y="Complaint_Resolution_Time",
-                      labels={"recorded_at": "Time", "kpi_value": "Closure Rate "})
+    fig = px.line(filtered, x="recorded_at", y="Ticket_Closure_Rate",
+                      labels={"recorded_at": "Time", "Ticket_Closure_Rate": "Closure Rate "})
     return fig
 def update_planned(time_range, region_val, node_val, fiber_val,
                     issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -490,9 +490,14 @@ def update_planned(time_range, region_val, node_val, fiber_val,
                                 issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
         if filtered.empty:
             return px.line(title="No data available for Churn Prediction")
-        fig = px.line(filtered, x="recorded_at", y="Historical_Maintenance_Frequency",
-                        
-                        labels={"recorded_at": "Time", "kpi_value": "Historical_Maintenance_Frequency"})
+        maintenance_counts = filtered['Maintenance_Type'].value_counts().reset_index()
+        maintenance_counts.columns = ['Maintenance_Type', 'Count'])
+        fig = px.pie(
+            maintenance_counts,
+            names='Maintenance_Type',
+            values='Count',
+            title='Maintenance Type Distribution'
+    )
         return fig
 
 def get_fiber_network_map():
