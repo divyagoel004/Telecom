@@ -115,6 +115,36 @@ def generate_sql(query):
        Truck_Roll_Decision.1)'''
     system_prompt = f"""
 You are a SQL expert. Convert the following natural language query into a SQL statement.
+When filtering on categorical columns, ensure that only the following allowed values are used:
+- Fiber_Type: ['Single-mode', 'Multi-mode', 'Aerial', 'Underground']
+- Connector_Type: ['SC', 'LC', 'ST']
+- Patch_Panel_Type: ['Patch_A', 'Patch_B', 'Patch_C']
+- Data_Rate_Unit: ['Mbps', 'Gbps']
+- Error_Logs: ['No errors', 'Minor error detected', 'Timeout error', 'Connection lost', 'Error code 404']
+- Fiber_Cut_Detection: ['Yes', 'No']
+- Bending_Losses: ['Yes', 'No']
+- Interference: ['None', 'Water', 'Rodents', 'Other']
+- Weather_Conditions: ['Rain', 'Storm', 'Temperature']
+- Fiber_Location: ['Underground', 'Aerial', 'Inside Building']
+- Nearby_Construction: ['Yes', 'No']
+- Power_Supply_Stability: ['Stable', 'Unstable', 'Fluctuating']
+- Router_Modem_Logs: ['OK', 'Rebooted', 'Timeout', 'Error']
+- Battery_Backup: ['Yes', 'No']
+- Voltage_Stability: ['Stable', 'Unstable', 'Fluctuating']
+- Device_Overheating: ['Yes', 'No']
+- Alarms: ['No alarms', 'High temperature alarm', 'Voltage fluctuation alarm', 'Network error alarm']
+- SLA_Priority: ['High', 'Medium', 'Low']
+- Service_Type: ['Broadband', 'IPTV', 'VoIP', 'Enterprise']
+- Customer_Downtime_Tolerance: ['High', 'Medium', 'Low']
+- Truck_Roll_Requirement: ['required', 'not required']
+- Time_Range: ['Last 24 Hours', 'Last 7 Days', 'Last Month', 'Custom Date Range']
+- Geographic_Region: ['New York, NY, 10001, Zone A, (40.7128,-74.0060)', 'Los Angeles, CA, 90001, Zone B, (34.0522,-118.2437)', 'Chicago, IL, 60601, Zone C, (41.8781,-87.6298)', 'Houston, TX, 77001, Zone D, (29.7604,-95.3698)', 'Phoenix, AZ, 85001, Zone E, (33.4484,-112.0740)']
+- Network_Node_Type: ['Core', 'Aggregation', 'Access', 'Customer Premises']
+- Issue_Type: ['Signal Degradation', 'Fiber Break', 'Power Outage', 'Equipment Failure']
+- Technician_Skill_Level: ['Splicer', 'Network Engineer', 'ONT/OLT Specialist']
+- Customer_SLA_Priority: ['Enterprise', 'Residential', 'Government']
+- Truck_Roll_Decision: ['Required', 'Not Required']
+
 Use this schema: {schema}.
 Return ONLY the SQL code, no explanations.
 """ 
@@ -239,7 +269,7 @@ def show_card_details(selected_card):
         col1, col2 = st.columns(2)
         with col1:
             st.write("### Data Distribution")
-            fig = px.histogram(filtered_data, x="kpi_value")
+            fig = px.histogram(filtered_data, x=list(selected_card['filters'].keys())
             st.plotly_chart(fig, use_container_width=True, height=300)
         with col2:
             st.write("### Trend Over Time")
