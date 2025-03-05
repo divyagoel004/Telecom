@@ -255,7 +255,7 @@ def generate_overview_cards(filtered):
     # KPI: Critical Fiber Issues (categorical: Issue_Type)
     with col1:
         # Build dropdown options from the unique values in the Issue_Type column
-        issue_options = list(filtered["Issue_Type"].unique())
+        issue_options = sorted(filtered["Issue_Type"].unique())
         # Set default to all available issues (or choose a subset if desired)
         selected_issues = st.multiselect(
             "Select Issue Types", options=issue_options, default=issue_options
@@ -269,7 +269,7 @@ def generate_overview_cards(filtered):
     # KPI: Truck Rolls (categorical: Truck_Roll_Decision)
     with col2:
         if "Truck_Roll_Decision" in filtered.columns:
-            truck_options = list(filtered["Truck_Roll_Decision"].unique())
+            truck_options = sorted(filtered["Truck_Roll_Decision"].unique())
         else:
             truck_options = list(
                 filtered["Truck_Roll_Requirement"]
