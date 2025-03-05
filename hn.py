@@ -274,7 +274,8 @@ def show_card_details(selected_card):
             st.plotly_chart(fig, use_container_width=True, height=300)
         with col2:
             st.write("### Trend Over Time")
-            time_fig = px.line(filtered_data, x="recorded_at", y=m)
+            filtered_data = filtered_data.groupby('recorded_at').size().reset_index(name='Count')
+            time_fig = px.line(filtered_data, x="recorded_at", y="Count")
             st.plotly_chart(time_fig, use_container_width=True, height=300)
         csv = filtered_data.to_csv(index=False)
         st.download_button(label="📥 Download Filtered Data", data=csv, file_name=f"{selected_card['type']}_data.csv", mime="text/csv")
