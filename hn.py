@@ -89,7 +89,7 @@ def recognize_speech():
     if text:
         st.session_state.text = text
 
-    return text
+    return st.session_state.text
 def generate_sql(query):
     schema = '''kpi(Fiber_Type, Cable_Length_km, Used_Fiber_Strands, Unused_Fiber_Strands,
       Installation_Date, Connector_Type, Patch_Panel_Type, Measurement_Time, Optical_Power_dBm, Optical_Loss_dB,
