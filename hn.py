@@ -268,6 +268,7 @@ def show_card_details(selected_card):
         st.dataframe(filtered_data)
         col1, col2 = st.columns(2)
         m=list(selected_card['filters'].keys())[0]
+        m=repr(m)
         with col1:
             st.write("### Data Distribution")
             fig = px.histogram(filtered_data, x=filtered_data.m)
