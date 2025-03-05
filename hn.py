@@ -33,13 +33,14 @@ st.markdown(
     h1, h2, h3, h4, h5, h6, p, .st-b8, .st-cm {
         color: #ffffff !important;
     }
+    .stDataFrame, .stPlotlyChart {
+    background-color: #000000 !important;
+}
     </style>
     """,
     unsafe_allow_html=True
 )
-.stDataFrame, .stPlotlyChart {
-    background-color: #000000 !important;
-}
+
 # -------------------- Environment & Data Setup --------------------
 load_dotenv()
 os.environ["GROQ_API_KEY"] = "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"
