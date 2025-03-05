@@ -724,10 +724,14 @@ with tabs[4]:
         if st.session_state.transcript:
             with st.spinner("Generating SQL..."):
                 sql_query = generate_sql(st.session_state.transcript)
-                
             if sql_query:
                 with st.spinner("Executing Query..."):
                     st.session_state.audio_data = fetch_data(sql_query)
+        else: 
+            st.write("Hi")
+                
+            
+            
                 
     # Display results
     if not st.session_state.audio_data.empty:
