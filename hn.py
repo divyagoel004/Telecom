@@ -361,15 +361,15 @@ def update_uptime(time_range, region_val, node_val, fiber_val,
     # df_kpi = filtered[filtered["kpi_name"] == "%Uptime / Performance"]
     if filtered.empty:
         return px.area(title="No data available for Uptime")
-    latest_record = filtered.sort_values('recorded_at').iloc[-1]
-    latest_uptime = latest_record['Uptime_Performance']
+    avg_uptime = df['Uptime_Performance'].mean()
+
     fig = go.Figure(go.Indicator(
-    mode="gauge+number",
-    value=latest_uptime,
-    title={'text': "Latest Uptime (%)"},
-    gauge={
+          mode="gauge+number",
+        value=avg_uptime,
+        title={'text': "Average Uptime (%)"},
+        gauge={
         'axis': {'range': [0, 100]},
-        'bar': {'color': "blue"},
+        'bar': {'color': "green"},
         'steps': [
             {'range': [0, 90], 'color': "red"},
             {'range': [90, 95], 'color': "yellow"},
@@ -378,10 +378,11 @@ def update_uptime(time_range, region_val, node_val, fiber_val,
         'threshold': {
             'line': {'color': "black", 'width': 4},
             'thickness': 0.75,
-            'value': latest_uptime
-            }
-        },hovertemplate="%{value:.2f}% Uptime_Performance"
-    ))
+            'value': avg_uptime
+        }
+    },
+    hovertemplate="%{value:.2f}% Uptime_Performance"  # This sets custom hover info
+))
     return fig
 def update_bandwidth( time_range, region_val, node_val, fiber_val,
                    issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
