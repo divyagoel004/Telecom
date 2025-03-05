@@ -403,7 +403,7 @@ def update_complaint(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
         return px.area(title="No data available for Complaint Resolution Time")
-    fig = px.area(filtered, x="recorded_at", y="Complaint_Resolution_Time",
+    fig = px.bar(filtered, x="recorded_at", y="Complaint_Resolution_Time",
                   labels={"recorded_at": "Time", "Complaint_Resolution_Time": "Resolution Time (min)"})
     return fig
 
@@ -413,7 +413,7 @@ def update_csat(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
         return px.line(title="No data available for CSAT")
-    fig = px.line(filtered, x="recorded_at", y="Customer_Satisfaction_Score",
+    fig = px.histogram(filtered, x="recorded_at", y="Customer_Satisfaction_Score",
                   labels={"recorded_at": "Time", "Customer_Satisfaction_Score": "CSAT Score"})
     return fig
 
@@ -433,7 +433,7 @@ def update_sla( time_range, region_val, node_val, fiber_val,
                                 issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
         if filtered.empty:
             return px.line(title="No data available for Churn Prediction")
-        fig = px.area(filtered, x="recorded_at", y="SLA_Priority",
+        fig = px.bar(filtered, x="recorded_at", y="SLA_Priority",
                         labels={"recorded_at": "Time", "kpi_value": "Service Level Agreement"})
         return fig
 def update_firstfix( time_range, region_val, node_val, fiber_val,
@@ -452,7 +452,7 @@ def update_callcenter( time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
             return px.line(title="No data available for Churn Prediction")
-    fig = px.area(filtered, x="recorded_at", y="Complaint_Resolution_Time",
+    fig = px.line(filtered, x="recorded_at", y="Complaint_Resolution_Time",
                       labels={"recorded_at": "Time", "kpi_value": "Call-Center Resolution Time"})
     return fig
 def update_selfservice( time_range, region_val, node_val, fiber_val,
@@ -461,7 +461,7 @@ def update_selfservice( time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
             return px.line(title="No data available for Churn Prediction")
-    fig = px.area(filtered, x="recorded_at", y="Self_Service_Resolution",
+    fig = px.bar(filtered, x="recorded_at", y="Self_Service_Resolution",
                       
                       labels={"recorded_at": "Time", "Self_Service_Resolution": "Self - Service Resolution Time"})
     return fig
@@ -471,7 +471,7 @@ def update_efficiency( time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
             return px.line(title="No data available for Churn Prediction")
-    fig = px.line(filtered, x="recorded_at", y="Technical_Efficiency",
+    fig = px.bar(filtered, x="recorded_at", y="Technical_Efficiency",
                       labels={"recorded_at": "Time", "Technical_Efficiency": "Efficiency Rate"})
     return fig
 
