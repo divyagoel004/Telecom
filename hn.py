@@ -356,20 +356,19 @@ def update_signal(time_range, region_val, node_val, fiber_val,
 
 def update_uptime(time_range, region_val, node_val, fiber_val,
                   issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
-    # Get the filtered DataFrame based on the provided parameters
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
-    # If there is no data after filtering, return an empty area chart with a message
     if filtered.empty:
         return px.area(title="No data available for Uptime")
     
-    # Compute the average uptime from the filtered dataset
+    # Compute average uptime from the filtered DataFrame
     avg_uptime = filtered['Uptime_Performance'].mean()
-
-    # Create a gauge chart to display the average uptime
+    
+    # Create a gauge chart using the Indicator trace.
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
         value=avg_uptime,
+        domain={'x': [0, 1], 'y': [0, 1]},  # required domain specification
         title={'text': "Average Uptime (%)"},
         gauge={
             'axis': {'range': [0, 100]},
@@ -384,8 +383,7 @@ def update_uptime(time_range, region_val, node_val, fiber_val,
                 'thickness': 0.75,
                 'value': avg_uptime
             }
-        },
-        hovertemplate="%{value:.2f}% Uptime_Performance"  # Custom hover information
+        }
     ))
     return fig
 def update_bandwidth( time_range, region_val, node_val, fiber_val,
