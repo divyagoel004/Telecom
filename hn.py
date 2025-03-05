@@ -267,13 +267,14 @@ def show_card_details(selected_card):
         st.write(selected_card["filters"])
         st.dataframe(filtered_data)
         col1, col2 = st.columns(2)
+        m=list(selected_card['filters'].keys())[0]
         with col1:
             st.write("### Data Distribution")
-            fig = px.histogram(filtered_data, x=filtered_data.list(selected_card['filters'].keys())[0])
+            fig = px.histogram(filtered_data, x=filtered_data.m)
             st.plotly_chart(fig, use_container_width=True, height=300)
         with col2:
             st.write("### Trend Over Time")
-            time_fig = px.line(filtered_data, x="recorded_at", y=filtered_data.list(selected_card['filters'].keys())[0])
+            time_fig = px.line(filtered_data, x="recorded_at", y=filtered_data.m)
             st.plotly_chart(time_fig, use_container_width=True, height=300)
         csv = filtered_data.to_csv(index=False)
         st.download_button(label="📥 Download Filtered Data", data=csv, file_name=f"{selected_card['type']}_data.csv", mime="text/csv")
