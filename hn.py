@@ -258,7 +258,7 @@ def generate_overview_cards(filtered):
         issue_options = sorted(filtered["Issue_Type"].unique())
         # Set default to all available issues (or choose a subset if desired)
         selected_issues = st.multiselect(
-            "Select Issue Types", options=issue_options, default=None
+            "Select Issue Types", options=issue_options
         )
         if st.button("Apply for Critical Fiber Issues", key="critical_card"):
             st.session_state.selected_card = {
