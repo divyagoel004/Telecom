@@ -162,7 +162,6 @@ Return ONLY the SQL code, no explanations.
     model="llama-3.3-70b-versatile",
     )
     sql_query = response.choices[0].message.content.replace("```sql", "").replace("```", "").strip()
-    st.write("Extract Data:", sql_query)
     return sql_query
 
 def fetch_data(query):
@@ -717,7 +716,6 @@ with tabs[4]:
             st.session_state.transcript = recognize_speech()
     with col2:
         transcript = st.text_area("Transcript", value=st.session_state.transcript)
-    st.session_state.transcript="installation date and resolution date"
     # Query execution
     if st.button("Extract Data"):
          if st.session_state.transcript:
