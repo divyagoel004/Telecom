@@ -12,6 +12,8 @@ from datetime import datetime, timedelta
 from streamlit_plotly_events import plotly_events
 from http.server import BaseHTTPRequestHandler
 import streamlit as st
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from streamlit_mic_recorder import speech_to_text
 
 # -------------------- Environment & Data Setup --------------------
@@ -284,7 +286,7 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
         return px.histogram(title="No data available for Fiber Utilization Rate")
-    fig = px.histogram(filtered, x="recorded_at", y="Data_Transmission_Rate",
+    fig = px.line(filtered, x="recorded_at", y="Fiber_Utilization",
                        labels={"recorded_at": "Time", "Fiber_Utilization_Rate": "Utilization (%)"})
     return fig
 
@@ -294,7 +296,7 @@ def update_packet_loss(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
         return px.scatter(title="No data available for Packet Loss Percentage")
-    fig = px.scatter(filtered, x="recorded_at", y="Packet_Loss_Percent",
+    fig = px.bar(filtered, x="recorded_at", y="Packet_Loss_Percent",
                      labels={"recorded_at": "Time", "Packet_Loss_Percent": "Packet Loss (%)"})
     return fig
 
@@ -304,7 +306,7 @@ def update_latency(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
         return px.area(title="No data available for Latency Trends")
-    fig = px.area(filtered, x="recorded_at", y="Latency_ms",
+    fig = px.line(filtered, x="recorded_at", y="Latency_ms",
                   labels={"recorded_at": "Time", "Latency_ms": "Latency (ms)"})
     return fig
 
@@ -314,8 +316,42 @@ def update_signal(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
         return px.area(title="No data available for Signal Strength & Noise Ratio")
-    fig = px.area(filtered, x="recorded_at", y="ONT_OLT_Signal_Strength",
-                  labels={"recorded_at": "Time", "ONT_OLT_Signal_Strength": "Signal Strength (dBm)"})
+
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+
+    fig.add_trace(
+        go.Scatter(
+                x=filtered['recorded_at'], 
+                y=filtered['ONT_OLT_Signal_Strength'], 
+                mode='lines',
+                name='Signal Strength',
+                line=dict(color='blue')
+        ),
+        secondary_y=False
+    )
+
+    # Add a trace for noise on the secondary y-axis
+    fig.add_trace(
+        go.Scatter(
+            x=filtered['recorded_at'], 
+            y=filtered['Noise_dB'], 
+             mode='lines',
+            name='Noise',
+            line=dict(color='red')
+        ),
+        secondary_y=True
+    )
+
+    # Update layout and axis titles
+    fig.update_layout(
+            title="Dual Axis Chart: Signal Strength and Noise",
+            xaxis_title="Recorded At",
+            legend=dict(x=0.05, y=0.95)
+    )
+    fig.update_yaxes(title_text="Signal Strength", secondary_y=False)
+    fig.update_yaxes(title_text="Noise", secondary_y=True)
+
     return fig
 
 def update_uptime(time_range, region_val, node_val, fiber_val,
@@ -325,8 +361,27 @@ def update_uptime(time_range, region_val, node_val, fiber_val,
     # df_kpi = filtered[filtered["kpi_name"] == "%Uptime / Performance"]
     if filtered.empty:
         return px.area(title="No data available for Uptime")
-    fig = px.histogram(filtered, x="recorded_at", y="ONT_OLT_Signal_Strength",
-                  labels={"recorded_at": "Time", "Uptime": "Uptime (%)"})
+    latest_record = filtered.sort_values('recorded_at').iloc[-1]
+    latest_uptime = latest_record['Uptime_Performance']
+    fig = go.Figure(go.Indicator(
+    mode="gauge+number",
+    value=latest_uptime,
+    title={'text': "Latest Uptime (%)"},
+    gauge={
+        'axis': {'range': [0, 100]},
+        'bar': {'color': "blue"},
+        'steps': [
+            {'range': [0, 90], 'color': "red"},
+            {'range': [90, 95], 'color': "yellow"},
+            {'range': [95, 100], 'color': "green"}
+        ],
+        'threshold': {
+            'line': {'color': "black", 'width': 4},
+            'thickness': 0.75,
+            'value': latest_uptime
+            }
+        }
+    ))
     return fig
 
 def update_complaint(time_range, region_val, node_val, fiber_val,
