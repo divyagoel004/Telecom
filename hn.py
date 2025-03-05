@@ -380,10 +380,20 @@ def update_uptime(time_range, region_val, node_val, fiber_val,
             'thickness': 0.75,
             'value': latest_uptime
             }
-        }
+        },hovertemplate="%{value:.2f}% Uptime_Performance"
     ))
     return fig
-
+def update_bandwidth( time_range, region_val, node_val, fiber_val,
+                   issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
+    filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
+                               issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
+    if filtered.empty:
+        return px.line(title="No data available for Bandwidth")
+    title_text = "Signal Strength & Noise Ratio" 
+    fig = px.histogram(filtered, x="recorded_at", y="Bandwidth_Gbps",
+                      title=title_text,
+                      labels={"recorded_at": "Noise Ratio", "Bandwidth_Gbps": "Bandwidth_Gbps"})
+    return fig
 def update_complaint(time_range, region_val, node_val, fiber_val,
                      issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
@@ -411,8 +421,8 @@ def update_churn(time_range, region_val, node_val, fiber_val,
     # df_kpi = filtered[filtered["kpi_name"] == "Churn Prediction & Retention Ratio"]
     if filtered.empty:
         return px.line(title="No data available for Churn Prediction")
-    fig = px.line(filtered, x="recorded_at", y="Customer_Satisfaction_Score",
-                     labels={"recorded_at": "Time", "kpi_value": "Churn/Retention (%)"})
+    fig = px.line(filtered, x="recorded_at", y="Customer_Churn_Rate",
+                     labels={"recorded_at": "Time", "Customer_Churn_Rate": "Churn/Retention (%)"})
     return fig
 def update_sla( time_range, region_val, node_val, fiber_val,
                     issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -642,7 +652,7 @@ with tabs[0]:
         st.plotly_chart(fig_uptime, use_container_width=True, height=300, key="plotly_uptime")
     with colF:
         st.subheader("Bandwidth Congestion Analysis")
-        fig_bandwidth = update_signal(time_range, region_val, node_val, fiber_val,
+        fig_bandwidth = update_bandwidth(time_range, region_val, node_val, fiber_val,
                                       issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
         st.plotly_chart(fig_bandwidth, use_container_width=True, height=300, key="plotly_bandwidth")
 
