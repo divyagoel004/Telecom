@@ -153,10 +153,10 @@ Return ONLY the SQL code, no explanations.
 
     response = client.chat.completions.create(
         messages=[
-        {
+        
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": query},
-        }
+        
     ],
     model="llama-3.3-70b-versatile",
     )
