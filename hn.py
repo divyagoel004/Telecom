@@ -269,19 +269,20 @@ def generate_overview_cards(filtered):
     
     # KPI: Truck Rolls (categorical: Truck_Roll_Decision)
     with col2:
-        if "Truck_Roll_Decision" in filtered.columns:
-            truck_options = sorted(filtered["Truck_Roll_Decision"].unique())
-        else:
-            truck_options = list(
-                filtered["Truck_Roll_Requirement"]
+        
+        if st.button("Apply for Truck Rolls", key="truck_card"):
+            if "Truck_Roll_Decision" in filtered.columns:
+                truck_options = sorted(filtered["Truck_Roll_Decision"].unique())
+            else:
+                truck_options = list(
+                    filtered["Truck_Roll_Requirement"]
                 .map(lambda x: "Required" if x == "required" else "Not Required")
                 .unique()
             )
-        # Default to all options so user can narrow it down
-        selected_truck = st.multiselect(
-            "Select Truck Roll Decisions", options=truck_options, default=truck_options
+            # Default to all options so user can narrow it down
+            selected_truck = st.multiselect(
+                "Select Truck Roll Decisions", options=truck_options, default=truck_options
         )
-        if st.button("Apply for Truck Rolls", key="truck_card"):
             st.session_state.selected_card = {
                 "type": "truck",
                 "filters": {"Truck_Roll_Decision": selected_truck}
