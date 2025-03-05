@@ -507,7 +507,7 @@ def update_planned(time_range, region_val, node_val, fiber_val,
             maintenance_counts,
             names='Maintenance_Type',
             values='Count',
-            title='Maintenance Type Distribution'
+            title='Maintenance Type Distribution',
             color_discrete_sequence=['#1f77b4', '#ff7f0e']
     )
         return fig
