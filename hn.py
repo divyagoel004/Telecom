@@ -68,7 +68,7 @@ def transform_data(force=True):
 
     # Generate 100 random timestamps within the last 24 hours.
     now = datetime.now()
-    start_time = now - timedelta(hours=10)
+    start_time = now
     start_ts = int(start_time.timestamp())
     end_ts = int(now.timestamp())
     random_ts = np.random.randint(start_ts, end_ts, 100)
