@@ -63,7 +63,7 @@ def transform_data(force=True):
 
     # Generate 100 random timestamps within the last 24 hours.
     now = datetime.now()
-    start_time = now - timedelta(hours=24)
+    start_time = now - timedelta(hours=4)
     start_ts = int(start_time.timestamp())
     end_ts = int(now.timestamp())
     random_ts = np.random.randint(start_ts, end_ts, 100)
@@ -188,7 +188,7 @@ def fetch_data(query):
         return pd.DataFrame()
 
 # -------------------- Global Filter Options --------------------
-time_range_options = ["24h", "7d", "30d", "all", "custom"]
+time_range_options = ["60 Min", "30 Min", "20 Min", "15 Min", "10 Min"]
 
 region_options = sorted(df["Geographic_Region"].unique())
 node_type_options = sorted(df["Network_Node_Type"].unique())
@@ -209,14 +209,20 @@ def get_filtered_df(time_range, region_val, node_val, fiber_val, issue_val,
     filtered = df.copy()
     now = filtered["recorded_at"].max()
     if time_range != "all":
-        if time_range == "24h":
-            cutoff = now - timedelta(hours=24)
+        if time_range == "60 Min":
+            cutoff = now - timedelta(minute=60)
             filtered = filtered[filtered["recorded_at"] >= cutoff]
-        elif time_range == "7d":
-            cutoff = now - timedelta(days=7)
+        elif time_range == "30 Min":
+            cutoff = now - timedelta(minute=30)
             filtered = filtered[filtered["recorded_at"] >= cutoff]
-        elif time_range == "30d":
-            cutoff = now - timedelta(days=30)
+        elif time_range == "20 Min":
+            cutoff = now - timedelta(minute=20)
+            filtered = filtered[filtered["recorded_at"] >= cutoff]
+        elif time_range == "15 Min":
+            cutoff = now - timedelta(minute=15)
+            filtered = filtered[filtered["recorded_at"] >= cutoff]
+        elif time_range == "10 Min":
+            cutoff = now - timedelta(minute=10)
             filtered = filtered[filtered["recorded_at"] >= cutoff]
     if region_val:
         filtered = filtered[filtered["Geographic_Region"].isin(region_val)]
