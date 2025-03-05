@@ -356,32 +356,36 @@ def update_signal(time_range, region_val, node_val, fiber_val,
 
 def update_uptime(time_range, region_val, node_val, fiber_val,
                   issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
+    # Get the filtered DataFrame based on the provided parameters
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
-    # df_kpi = filtered[filtered["kpi_name"] == "%Uptime / Performance"]
+    # If there is no data after filtering, return an empty area chart with a message
     if filtered.empty:
         return px.area(title="No data available for Uptime")
-    avg_uptime = df['Uptime_Performance'].mean()
+    
+    # Compute the average uptime from the filtered dataset
+    avg_uptime = filtered['Uptime_Performance'].mean()
 
+    # Create a gauge chart to display the average uptime
     fig = go.Figure(go.Indicator(
-          mode="gauge+number",
+        mode="gauge+number",
         value=avg_uptime,
         title={'text': "Average Uptime (%)"},
         gauge={
-        'axis': {'range': [0, 100]},
-        'bar': {'color': "green"},
-        'steps': [
-            {'range': [0, 90], 'color': "red"},
-            {'range': [90, 95], 'color': "yellow"},
-            {'range': [95, 100], 'color': "green"}
-        ],
-        'threshold': {
-            'line': {'color': "black", 'width': 4},
-            'thickness': 0.75,
-            'value': avg_uptime
-        }
-    },
-    hovertemplate="%{value:.2f}% Uptime_Performance"  # This sets custom hover info
+            'axis': {'range': [0, 100]},
+            'bar': {'color': "green"},
+            'steps': [
+                {'range': [0, 90], 'color': "red"},
+                {'range': [90, 95], 'color': "yellow"},
+                {'range': [95, 100], 'color': "green"}
+            ],
+            'threshold': {
+                'line': {'color': "black", 'width': 4},
+                'thickness': 0.75,
+                'value': avg_uptime
+            }
+        },
+        hovertemplate="%{value:.2f}% Uptime_Performance"  # Custom hover information
     ))
     return fig
 def update_bandwidth( time_range, region_val, node_val, fiber_val,
