@@ -70,6 +70,7 @@ def transform_data(force=True):
     # Generate 100 random timestamps within the last 24 hours.
     india_tz = pytz.timezone('Asia/Kolkata')
     now = datetime.now(india_tz)
+    now = now.strftime("%Y-%m-%d %H:%M:%S %Z%z")
     start_time = now - timedelta(hours=30)
     start_ts = int(start_time.timestamp())
     end_ts = int(now.timestamp())
