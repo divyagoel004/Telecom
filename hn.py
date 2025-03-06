@@ -260,7 +260,7 @@ def generate_overview_cards(filtered):
         
         # Show dropdown and Apply button only if this card is active
         if st.session_state.get("active_card") == "critical":
-            issue_options = list(filtered["Issue_Type"].unique())
+            issue_options = list(df["Issue_Type"].unique())
             selected_issues = st.multiselect(
                 "Select Issue Types", 
                 options=issue_options, 
@@ -281,7 +281,7 @@ def generate_overview_cards(filtered):
             st.session_state.active_card = "truck"
         
         if st.session_state.get("active_card") == "truck":
-            truck_options = list(filtered["Truck_Roll_Decision"].unique())
+            truck_options = list(df["Truck_Roll_Decision"].unique())
             selected_truck = st.multiselect(
                 "Select Truck Roll Decisions",
                 options=truck_options,
