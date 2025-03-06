@@ -259,19 +259,21 @@ def generate_overview_cards(filtered):
         issue_options = list(filtered["Issue_Type"].unique())
 
     # Create a multiselect dropdown with no default selection
-        selected_issues = st.multiselect(
-            "Select Issue Types", options=issue_options, default=[]
-            )
+       
         if st.button("🚨 Critical Fiber Issues", key="critical_card"):
+            selected_issues = st.multiselect(
+                "Select Issue Types", options=issue_options, default=[]
+            )
             st.session_state.selected_card = {"type": "critical", "filters": {"Issue_Type": selected_issues}}
     with col2:
         truck_options = list(filtered["Truck_Roll_Decision"].unique())
 
         # Create a multiselect dropdown with no default selection
-        selected_truck = st.multiselect(
+        
+        if st.button("🚚 Truck Rolls", key="truck_card"):
+            selected_truck = st.multiselect(
             "Select Truck Roll", options=truck_options, default=[]
             )
-        if st.button("🚚 Truck Rolls", key="truck_card"):
             st.session_state.selected_card = {"type": "truck", "filters": {"Truck_Roll_Decision": selected_truck}}
     # KPI: Healthy Connections (numeric filter, so no dropdown is added)
     with col3:
