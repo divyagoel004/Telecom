@@ -254,11 +254,25 @@ def generate_overview_cards(filtered):
     
     # KPI: Critical Fiber Issues (categorical: Issue_Type)
     with col1:
+
+    # Create a list of unique Issue_Type values from the dataset
+        issue_options = list(filtered["Issue_Type"].unique())
+
+    # Create a multiselect dropdown with no default selection
+        selected_issues = st.multiselect(
+            "Select Issue Types", options=issue_options, default=[]
+            )
         if st.button("🚨 Critical Fiber Issues", key="critical_card"):
-            st.session_state.selected_card = {"type": "critical", "filters": {"Issue_Type": "Fiber Break"}}
+            st.session_state.selected_card = {"type": "critical", "filters": {"Issue_Type": selected_issues}}
     with col2:
+         truck_options = list(filtered["Truck_Roll_Decision"].unique())
+
+    # Create a multiselect dropdown with no default selection
+        selected_issues = st.multiselect(
+            "Select Truck Roll", options=truck_options, default=[]
+            )
         if st.button("🚚 Truck Rolls", key="truck_card"):
-            st.session_state.selected_card = {"type": "truck", "filters": {"Truck_Roll_Decision": "Required"}}
+            st.session_state.selected_card = {"type": "truck", "filters": {"Truck_Roll_Decision": selected_issues}}
     # KPI: Healthy Connections (numeric filter, so no dropdown is added)
     with col3:
         if st.button("📡 Healthy Connections", key="healthy_card"):
