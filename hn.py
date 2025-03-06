@@ -265,9 +265,9 @@ def generate_overview_cards(filtered):
         if st.button("🚨 Critical Fiber Issues", key="critical_card"):
             st.session_state.selected_card = {"type": "critical", "filters": {"Issue_Type": selected_issues}}
     with col2:
-         truck_options = list(filtered["Truck_Roll_Decision"].unique())
+        truck_options = list(filtered["Truck_Roll_Decision"].unique())
 
-    # Create a multiselect dropdown with no default selection
+        # Create a multiselect dropdown with no default selection
         selected_issues = st.multiselect(
             "Select Truck Roll", options=truck_options, default=[]
             )
