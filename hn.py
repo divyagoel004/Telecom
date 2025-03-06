@@ -247,12 +247,13 @@ def get_filtered_df(time_range, region_val, node_val, fiber_val, issue_val,
     return filtered
 
 def generate_overview_cards(filtered):
-    # Store full filtered data for drill-down purposes
-    st.session_state.full_filtered_data = filtered
+    # Store filtered data once per session
+    if 'full_filtered_data' not in st.session_state:
+        st.session_state.full_filtered_data = filtered
     
     col1, col2, col3, col4 = st.columns(4)
     
-    # Initialize session state variables if they don't exist
+    # Initialize session state variables
     if 'active_card' not in st.session_state:
         st.session_state.active_card = None
     if 'critical_selected' not in st.session_state:
@@ -260,78 +261,75 @@ def generate_overview_cards(filtered):
     if 'truck_selected' not in st.session_state:
         st.session_state.truck_selected = []
 
+    # Cache expensive computations
+    @st.cache_data(ttl=60)
+    def get_unique_values(df, column):
+        return df[column].unique().tolist()
+
     # KPI: Critical Fiber Issues
     with col1:
-        # Toggle dropdown visibility on button click
         if st.button("🚨 Critical Fiber Issues", key="critical_card"):
-            st.session_state.active_card = "critical" if st.session_state.active_card != "critical" else None
+            # Toggle visibility without resetting selections
+            new_state = "critical" if st.session_state.active_card != "critical" else None
+            st.session_state.active_card = new_state
         
-        # Show dropdown and Apply button only if this card is active
-        if st.session_state.get("active_card") == "critical":
-            issue_options = list(df["Issue_Type"].unique())  # Use filtered data instead of df
-            colA, colB = st.columns(2)
-            with colA:
-                # Preserve selections between openings
-                selected_issues = st.multiselect(
+        if st.session_state.active_card == "critical":
+            with st.form(key="critical_form"):
+                issue_options = get_unique_values(df, "Issue_Type")
+                selected = st.multiselect(
                     "Select Issue Types", 
-                    options=issue_options, 
+                    options=issue_options,
                     default=st.session_state.critical_selected,
-                    key="critical_multiselect"
+                    key="critical_select"
                 )
-            with colB:
-                if st.button("Apply", key="apply_critical"):
-                    # Update session state with new selections
-                    st.session_state.critical_selected = selected_issues
+                
+                if st.form_submit_button("Apply"):
+                    st.session_state.critical_selected = selected
                     st.session_state.selected_card = {
                         "type": "critical",
-                        "filters": {"Issue_Type": selected_issues}
+                        "filters": {"Issue_Type": selected}
                     }
 
     # KPI: Truck Rolls
     with col2:
         if st.button("🚚 Truck Rolls", key="truck_card"):
-            st.session_state.active_card = "truck" if st.session_state.active_card != "truck" else None
+            # Toggle visibility without resetting selections
+            new_state = "truck" if st.session_state.active_card != "truck" else None
+            st.session_state.active_card = new_state
         
-        if st.session_state.get("active_card") == "truck":
-            truck_options = list(df["Truck_Roll_Decision"].unique())  # Use filtered data instead of df
-            colA, colB = st.columns(2)
-            with colA:
-                # Preserve selections between openings
-                selected_truck = st.multiselect(
-                    "Select Truck Roll Decisions",
+        if st.session_state.active_card == "truck":
+            with st.form(key="truck_form"):
+                truck_options = get_unique_values(df, "Truck_Roll_Decision")
+                selected = st.multiselect(
+                    "Select Truck Rolls",
                     options=truck_options,
                     default=st.session_state.truck_selected,
-                    key="truck_multiselect"
+                    key="truck_select"
                 )
-            with colB:
-                if st.button("Apply", key="apply_truck"):
-                    # Update session state with new selections
-                    st.session_state.truck_selected = selected_truck
+                
+                if st.form_submit_button("Apply"):
+                    st.session_state.truck_selected = selected
                     st.session_state.selected_card = {
                         "type": "truck",
-                        "filters": {"Truck_Roll_Decision": selected_truck}
+                        "filters": {"Truck_Roll_Decision": selected}
                     }
-           
-    
-    # KPI: Healthy Connections (pre-defined numeric filter)
+
+    # Healthy Connections (instant apply)
     with col3:
         if st.button("📡 Healthy Connections", key="healthy_card"):
             st.session_state.selected_card = {
                 "type": "healthy",
-                "filters": {"Data_Transmission_Rate": lambda x: x >= 95}
+                "filters": {"Data_Transmission_Rate": (">=", 95)}
             }
-            st.session_state.active_card = None  # Clear any active dropdowns
-    
-    # KPI: Pending Maintenance (pre-defined numeric filter)
+
+    # Pending Maintenance (instant apply)
     with col4:
         if st.button("🔧 Pending Maintenance", key="pending_card"):
             st.session_state.selected_card = {
                 "type": "pending",
-                "filters": {"Historical_Maintenance_Frequency": lambda x: x > 5}
+                "filters": {"Historical_Maintenance_Frequency": (">", 5)}
             }
-            st.session_state.active_card = None  # Clear any active dropdowns
-    
-    # Show details if a card is selected
+
     if "selected_card" in st.session_state:
         show_card_details(st.session_state.selected_card)
 
@@ -339,18 +337,22 @@ def show_card_details(selected_card):
     filtered_data = st.session_state.full_filtered_data.copy()
     filters = selected_card.get("filters", {})
     
-    for key, value in filters.items():
-        if isinstance(value, list):
-            # If no values selected, return empty DataFrame
-            if len(value) == 0:
-                filtered_data = filtered_data.iloc[0:0]  # Empty DataFrame
+    for col, condition in filters.items():
+        if isinstance(condition, list):
+            # Categorical filter
+            if condition:
+                filtered_data = filtered_data[filtered_data[col].isin(condition)]
             else:
-                filtered_data = filtered_data[filtered_data[key].isin(value)]
-        elif callable(value):
-            filtered_data = filtered_data[filtered_data[key].apply(value)]
-        else:
-            filtered_data = filtered_data[filtered_data[key] == value]
-    
+                filtered_data = filtered_data.iloc[0:0]  # Empty DataFrame
+        elif isinstance(condition, tuple):
+            # Numerical filter
+            op, value = condition
+            if op == ">=":
+                filtered_data = filtered_data[filtered_data[col] >= value]
+            elif op == ">":
+                filtered_data = filtered_data[filtered_data[col] > value]
+            # Add other operators as needed
+    # Show first 100 rows for performance  
     # Display filtered results (modify as needed for your use case)
     with st.expander(f"🔍 {selected_card['type'].capitalize()} Details", expanded=True):
         st.write(f"Showing {len(filtered_data)} records matching:")
