@@ -252,55 +252,65 @@ def generate_overview_cards(filtered):
     
     col1, col2, col3, col4 = st.columns(4)
     
-    # KPI: Critical Fiber Issues (categorical: Issue_Type)
+    # Initialize session state variables if they don't exist
+    if 'active_card' not in st.session_state:
+        st.session_state.active_card = None
+    if 'critical_selected' not in st.session_state:
+        st.session_state.critical_selected = []
+    if 'truck_selected' not in st.session_state:
+        st.session_state.truck_selected = []
+
+    # KPI: Critical Fiber Issues
     with col1:
-        # Show KPI button
+        # Toggle dropdown visibility on button click
         if st.button("🚨 Critical Fiber Issues", key="critical_card"):
-            st.session_state.active_card = "critical"
+            st.session_state.active_card = "critical" if st.session_state.active_card != "critical" else None
         
         # Show dropdown and Apply button only if this card is active
         if st.session_state.get("active_card") == "critical":
-            issue_options = list(df["Issue_Type"].unique())
-            colA , colB=st.columns(2)
+            issue_options = list(filtered["Issue_Type"].unique())  # Use filtered data instead of df
+            colA, colB = st.columns(2)
             with colA:
+                # Preserve selections between openings
                 selected_issues = st.multiselect(
                     "Select Issue Types", 
                     options=issue_options, 
-                    default=[],
+                    default=st.session_state.critical_selected,
                     key="critical_multiselect"
                 )
             with colB:
                 if st.button("Apply", key="apply_critical"):
-                    # Apply filter based on selections
+                    # Update session state with new selections
+                    st.session_state.critical_selected = selected_issues
                     st.session_state.selected_card = {
                         "type": "critical",
                         "filters": {"Issue_Type": selected_issues}
                     }
-                    st.session_state.active_card = None  # Hide dropdown
-    
-    # KPI: Truck Rolls (categorical: Truck_Roll_Decision)
+
+    # KPI: Truck Rolls
     with col2:
         if st.button("🚚 Truck Rolls", key="truck_card"):
-            st.session_state.active_card = "truck"
+            st.session_state.active_card = "truck" if st.session_state.active_card != "truck" else None
         
         if st.session_state.get("active_card") == "truck":
-            truck_options = list(df["Truck_Roll_Decision"].unique())
-            colA , colB=st.columns(2)
+            truck_options = list(filtered["Truck_Roll_Decision"].unique())  # Use filtered data instead of df
+            colA, colB = st.columns(2)
             with colA:
+                # Preserve selections between openings
                 selected_truck = st.multiselect(
-                "Select Truck Roll Decisions",
-                options=truck_options,
-                default=[],
-                key="truck_multiselect"
+                    "Select Truck Roll Decisions",
+                    options=truck_options,
+                    default=st.session_state.truck_selected,
+                    key="truck_multiselect"
                 )
             with colB:
-                 if st.button("Apply", key="apply_truck"):
-                        st.session_state.selected_card = {
-                            "type": "truck",
-                            "filters": {"Truck_Roll_Decision": selected_truck}
-                            }
-                        st.session_state.active_card = None
-            
+                if st.button("Apply", key="apply_truck"):
+                    # Update session state with new selections
+                    st.session_state.truck_selected = selected_truck
+                    st.session_state.selected_card = {
+                        "type": "truck",
+                        "filters": {"Truck_Roll_Decision": selected_truck}
+                    }
            
     
     # KPI: Healthy Connections (pre-defined numeric filter)
