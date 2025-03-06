@@ -276,19 +276,21 @@ def generate_overview_cards(filtered):
         if st.session_state.active_card == "critical":
             with st.form(key="critical_form"):
                 issue_options = get_unique_values(df, "Issue_Type")
-                selected = st.multiselect(
-                    "Select Issue Types", 
-                    options=issue_options,
-                    default=st.session_state.critical_selected,
-                    key="critical_select"
-                )
-                
-                if st.form_submit_button("Apply"):
-                    st.session_state.critical_selected = selected
-                    st.session_state.selected_card = {
-                        "type": "critical",
-                        "filters": {"Issue_Type": selected}
-                    }
+                cola , colb = st.columns(2)
+                with cola:
+                    selected = st.multiselect(
+                        "Select Issue Types", 
+                        options=issue_options,
+                        default=st.session_state.critical_selected,
+                        key="critical_select"
+                    )
+                with colb:
+                    if st.form_submit_button("Apply"):
+                        st.session_state.critical_selected = selected
+                        st.session_state.selected_card = {
+                            "type": "critical",
+                            "filters": {"Issue_Type": selected}
+                        }
 
     # KPI: Truck Rolls
     with col2:
@@ -300,19 +302,21 @@ def generate_overview_cards(filtered):
         if st.session_state.active_card == "truck":
             with st.form(key="truck_form"):
                 truck_options = get_unique_values(df, "Truck_Roll_Decision")
-                selected = st.multiselect(
-                    "Select Truck Rolls",
-                    options=truck_options,
-                    default=st.session_state.truck_selected,
-                    key="truck_select"
-                )
-                
-                if st.form_submit_button("Apply"):
-                    st.session_state.truck_selected = selected
-                    st.session_state.selected_card = {
-                        "type": "truck",
-                        "filters": {"Truck_Roll_Decision": selected}
-                    }
+                cola , colb = st.columns(2)
+                with cola:
+                    selected = st.multiselect(
+                        "Select Truck Rolls",
+                        options=truck_options,
+                        default=st.session_state.truck_selected,
+                        key="truck_select"
+                    )
+                with colb:    
+                    if st.form_submit_button("Apply"):
+                        st.session_state.truck_selected = selected
+                        st.session_state.selected_card = {
+                            "type": "truck",
+                            "filters": {"Truck_Roll_Decision": selected}
+                        }
 
     # Healthy Connections (instant apply)
     with col3:
