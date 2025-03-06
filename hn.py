@@ -268,7 +268,7 @@ def generate_overview_cards(filtered):
         
         # Show dropdown and Apply button only if this card is active
         if st.session_state.get("active_card") == "critical":
-            issue_options = list(filtered["Issue_Type"].unique())  # Use filtered data instead of df
+            issue_options = list(df["Issue_Type"].unique())  # Use filtered data instead of df
             colA, colB = st.columns(2)
             with colA:
                 # Preserve selections between openings
@@ -293,7 +293,7 @@ def generate_overview_cards(filtered):
             st.session_state.active_card = "truck" if st.session_state.active_card != "truck" else None
         
         if st.session_state.get("active_card") == "truck":
-            truck_options = list(filtered["Truck_Roll_Decision"].unique())  # Use filtered data instead of df
+            truck_options = list(df["Truck_Roll_Decision"].unique())  # Use filtered data instead of df
             colA, colB = st.columns(2)
             with colA:
                 # Preserve selections between openings
