@@ -268,11 +268,11 @@ def generate_overview_cards(filtered):
         truck_options = list(filtered["Truck_Roll_Decision"].unique())
 
         # Create a multiselect dropdown with no default selection
-        selected_issues = st.multiselect(
+        selected_truck = st.multiselect(
             "Select Truck Roll", options=truck_options, default=[]
             )
         if st.button("🚚 Truck Rolls", key="truck_card"):
-            st.session_state.selected_card = {"type": "truck", "filters": {"Truck_Roll_Decision": selected_issues}}
+            st.session_state.selected_card = {"type": "truck", "filters": {"Truck_Roll_Decision": selected_truck}}
     # KPI: Healthy Connections (numeric filter, so no dropdown is added)
     with col3:
         if st.button("📡 Healthy Connections", key="healthy_card"):
@@ -297,7 +297,8 @@ def show_card_details(selected_card):
     filters = selected_card.get("filters", {})
     for key, value in selected_card["filters"].items():
         if isinstance(value, list):
-            filtered_data = filtered_data[filtered_data[key].isin(value)]
+            if value: 
+                filtered_data = filtered_data[filtered_data[key].isin(value)]
         # If the filter value is a callable (e.g., lambda), apply it to each element
         elif callable(value):
             filtered_data = filtered_data[filtered_data[key].apply(value)]
