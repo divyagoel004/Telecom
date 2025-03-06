@@ -261,19 +261,22 @@ def generate_overview_cards(filtered):
         # Show dropdown and Apply button only if this card is active
         if st.session_state.get("active_card") == "critical":
             issue_options = list(df["Issue_Type"].unique())
-            selected_issues = st.multiselect(
-                "Select Issue Types", 
-                options=issue_options, 
-                default=[],
-                key="critical_multiselect"
-            )
-            if st.button("Apply", key="apply_critical"):
-                # Apply filter based on selections
-                st.session_state.selected_card = {
-                    "type": "critical",
-                    "filters": {"Issue_Type": selected_issues}
-                }
-                st.session_state.active_card = None  # Hide dropdown
+            colA , colB=st.columns(2)
+            with colA:
+                selected_issues = st.multiselect(
+                    "Select Issue Types", 
+                    options=issue_options, 
+                    default=[],
+                    key="critical_multiselect"
+                )
+            with colB:
+                if st.button("Apply", key="apply_critical"):
+                    # Apply filter based on selections
+                    st.session_state.selected_card = {
+                        "type": "critical",
+                        "filters": {"Issue_Type": selected_issues}
+                    }
+                    st.session_state.active_card = None  # Hide dropdown
     
     # KPI: Truck Rolls (categorical: Truck_Roll_Decision)
     with col2:
@@ -282,18 +285,23 @@ def generate_overview_cards(filtered):
         
         if st.session_state.get("active_card") == "truck":
             truck_options = list(df["Truck_Roll_Decision"].unique())
-            selected_truck = st.multiselect(
+            colA , colB=st.columns(2)
+            with colA:
+                selected_truck = st.multiselect(
                 "Select Truck Roll Decisions",
                 options=truck_options,
                 default=[],
                 key="truck_multiselect"
-            )
-            if st.button("Apply", key="apply_truck"):
-                st.session_state.selected_card = {
-                    "type": "truck",
-                    "filters": {"Truck_Roll_Decision": selected_truck}
-                }
-                st.session_state.active_card = None
+                )
+            with colB:
+                 if st.button("Apply", key="apply_truck"):
+                        st.session_state.selected_card = {
+                            "type": "truck",
+                            "filters": {"Truck_Roll_Decision": selected_truck}
+                            }
+                        st.session_state.active_card = None
+            
+           
     
     # KPI: Healthy Connections (pre-defined numeric filter)
     with col3:
