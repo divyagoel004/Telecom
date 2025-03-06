@@ -254,59 +254,86 @@ def generate_overview_cards(filtered):
     
     # KPI: Critical Fiber Issues (categorical: Issue_Type)
     with col1:
-
-    # Create a list of unique Issue_Type values from the dataset
-        issue_options = list(filtered["Issue_Type"].unique())
-
-    # Create a multiselect dropdown with no default selection
-       
+        # Show KPI button
         if st.button("🚨 Critical Fiber Issues", key="critical_card"):
-            selected_issues = st.multiselect(
-                "Select Issue Types", options=issue_options, default=[]
-            )
-            st.session_state.selected_card = {"type": "critical", "filters": {"Issue_Type": selected_issues}}
-    with col2:
-        truck_options = list(filtered["Truck_Roll_Decision"].unique())
-
-        # Create a multiselect dropdown with no default selection
+            st.session_state.active_card = "critical"
         
-        if st.button("🚚 Truck Rolls", key="truck_card"):
-            selected_truck = st.multiselect(
-            "Select Truck Roll", options=truck_options, default=[]
+        # Show dropdown and Apply button only if this card is active
+        if st.session_state.get("active_card") == "critical":
+            issue_options = list(filtered["Issue_Type"].unique())
+            selected_issues = st.multiselect(
+                "Select Issue Types", 
+                options=issue_options, 
+                default=[],
+                key="critical_multiselect"
             )
-            st.session_state.selected_card = {"type": "truck", "filters": {"Truck_Roll_Decision": selected_truck}}
-    # KPI: Healthy Connections (numeric filter, so no dropdown is added)
+            if st.button("Apply", key="apply_critical"):
+                # Apply filter based on selections
+                st.session_state.selected_card = {
+                    "type": "critical",
+                    "filters": {"Issue_Type": selected_issues}
+                }
+                st.session_state.active_card = None  # Hide dropdown
+    
+    # KPI: Truck Rolls (categorical: Truck_Roll_Decision)
+    with col2:
+        if st.button("🚚 Truck Rolls", key="truck_card"):
+            st.session_state.active_card = "truck"
+        
+        if st.session_state.get("active_card") == "truck":
+            truck_options = list(filtered["Truck_Roll_Decision"].unique())
+            selected_truck = st.multiselect(
+                "Select Truck Roll Decisions",
+                options=truck_options,
+                default=[],
+                key="truck_multiselect"
+            )
+            if st.button("Apply", key="apply_truck"):
+                st.session_state.selected_card = {
+                    "type": "truck",
+                    "filters": {"Truck_Roll_Decision": selected_truck}
+                }
+                st.session_state.active_card = None
+    
+    # KPI: Healthy Connections (pre-defined numeric filter)
     with col3:
         if st.button("📡 Healthy Connections", key="healthy_card"):
             st.session_state.selected_card = {
                 "type": "healthy",
                 "filters": {"Data_Transmission_Rate": lambda x: x >= 95}
             }
+            st.session_state.active_card = None  # Clear any active dropdowns
     
-    # KPI: Pending Maintenance (numeric filter, so no dropdown is added)
+    # KPI: Pending Maintenance (pre-defined numeric filter)
     with col4:
         if st.button("🔧 Pending Maintenance", key="pending_card"):
             st.session_state.selected_card = {
                 "type": "pending",
                 "filters": {"Historical_Maintenance_Frequency": lambda x: x > 5}
             }
+            st.session_state.active_card = None  # Clear any active dropdowns
     
+    # Show details if a card is selected
     if "selected_card" in st.session_state:
         show_card_details(st.session_state.selected_card)
 
 def show_card_details(selected_card):
     filtered_data = st.session_state.full_filtered_data.copy()
     filters = selected_card.get("filters", {})
-    for key, value in selected_card["filters"].items():
+    
+    for key, value in filters.items():
         if isinstance(value, list):
-            if value: 
+            # If no values selected, return empty DataFrame
+            if len(value) == 0:
+                filtered_data = filtered_data.iloc[0:0]  # Empty DataFrame
+            else:
                 filtered_data = filtered_data[filtered_data[key].isin(value)]
-        # If the filter value is a callable (e.g., lambda), apply it to each element
         elif callable(value):
             filtered_data = filtered_data[filtered_data[key].apply(value)]
-        # Otherwise, use simple equality
         else:
             filtered_data = filtered_data[filtered_data[key] == value]
+    
+    # Display filtered results (modify as needed for your use case)
     with st.expander(f"🔍 {selected_card['type'].capitalize()} Details", expanded=True):
         st.write(f"Showing {len(filtered_data)} records matching:")
         st.write(selected_card["filters"])
