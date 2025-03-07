@@ -387,7 +387,7 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
         return fig
     fig = px.line(filtered, x="recorded_at", y="Fiber_Utilization",
                        labels={"recorded_at": "Time", "Fiber_Utilization_Rate": "Utilization (%)"})
-    threshold_value = 65
+    threshold_value = 80
 
     # Add a horizontal threshold line
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
@@ -419,6 +419,12 @@ def update_latency(time_range, region_val, node_val, fiber_val,
         return fig
     fig = px.line(filtered, x="recorded_at", y="Latency_ms",
                   labels={"recorded_at": "Time", "Latency_ms": "Latency (ms)"})
+    threshold_value = 75
+
+    # Add a horizontal threshold line
+    fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
+              annotation_text=f"Threshold ({threshold_value}%)", 
+              annotation_position="top right")
     fig.update_traces(line=dict(color='#2ca02c'))
     return fig
 
@@ -534,6 +540,12 @@ def update_churn(time_range, region_val, node_val, fiber_val,
         return fig
     fig = px.line(filtered, x="recorded_at", y="Customer_Churn_Rate",
                      labels={"recorded_at": "Time", "Customer_Churn_Rate": "Churn/Retention (%)"})
+    threshold_value = 85
+
+    # Add a horizontal threshold line
+    fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
+              annotation_text=f"Threshold ({threshold_value}%)", 
+              annotation_position="top right")
     fig.update_traces(line=dict(color='#7f7f7f'))
     return fig
 def update_sla( time_range, region_val, node_val, fiber_val,
@@ -558,6 +570,12 @@ def update_firstfix( time_range, region_val, node_val, fiber_val,
         fig = px.line(filtered, x="recorded_at", y="First_Fix_Rate",
                         
                         labels={"recorded_at": "Time", "First_Fix_Rate": "First_Fix_Rate"})
+        threshold_value = 72
+
+    # Add a horizontal threshold line
+        fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
+              annotation_text=f"Threshold ({threshold_value}%)", 
+              annotation_position="top right")
         fig.update_traces(marker=dict(color='#bcbd22'))
         return fig
 def update_callcenter( time_range, region_val, node_val, fiber_val,
@@ -570,6 +588,12 @@ def update_callcenter( time_range, region_val, node_val, fiber_val,
         return fig
     fig = px.line(filtered, x="recorded_at", y="Complaint_Resolution_Time",
                       labels={"recorded_at": "Time", "kpi_value": "Call-Center Resolution Time"})
+    threshold_value = 65
+
+    # Add a horizontal threshold line
+    fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
+              annotation_text=f"Threshold ({threshold_value}%)", 
+              annotation_position="top right")
     fig.update_traces(line=dict(color='#d62728'))
     return fig
 def update_selfservice( time_range, region_val, node_val, fiber_val,
@@ -608,6 +632,12 @@ def update_ticketclosure( time_range, region_val, node_val, fiber_val,
         return fig
     fig = px.line(filtered, x="recorded_at", y="Ticket_Closure_Rate",
                       labels={"recorded_at": "Time", "Ticket_Closure_Rate": "Closure Rate "})
+    threshold_value = 79
+
+    # Add a horizontal threshold line
+    fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
+              annotation_text=f"Threshold ({threshold_value}%)", 
+              annotation_position="top right")
     return fig
 def update_planned(time_range, region_val, node_val, fiber_val,
                     issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
