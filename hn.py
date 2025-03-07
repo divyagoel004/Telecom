@@ -270,15 +270,15 @@ def get_filtered_df(time_range, region_val, node_val, fiber_val, issue_val,
                         
 
 st.markdown(
-    """
+   """
     <style>
-    /* Approach 1: target by data-testid */
-    button[data-testid="button"] {
-        color: #000000 !important; /* black text */
+    /* Target buttons using multiple selectors */
+    .stButton button,
+    button[data-testid="stButton"] {
+        color: #000000 !important;  /* Force button text to black */
     }
     </style>
-    """,
-    unsafe_allow_html=True
+    """, unsafe_allow_html=True
 )
 
 def generate_overview_cards(filtered):
