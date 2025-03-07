@@ -387,7 +387,7 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
         return fig
     fig = px.line(filtered, x="recorded_at", y="Fiber_Utilization",
                        labels={"recorded_at": "Time", "Fiber_Utilization_Rate": "Utilization (%)"})
-    threshold_value = 6
+    threshold_value = 65
 
     # Add a horizontal threshold line
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
