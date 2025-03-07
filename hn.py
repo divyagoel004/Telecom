@@ -462,7 +462,28 @@ def update_signal(time_range, region_val, node_val, fiber_val,
         ),
         secondary_y=True
     )
+    signal_threshold = 10   # Example threshold for Signal Strength on primary y-axis
+    noise_threshold = 2      # Example threshold for Noise on secondary y-axis
 
+    # Add threshold line for Signal Strength
+    fig.add_hline(
+        y=signal_threshold, 
+        line_dash="dash", 
+        line_color="blue", 
+        annotation_text=f"Signal Threshold ({signal_threshold})",
+        annotation_position="top left",
+        secondary_y=False
+    )
+
+    # Add threshold line for Noise
+    fig.add_hline(
+        y=noise_threshold, 
+        line_dash="dash", 
+        line_color="red", 
+        annotation_text=f"Noise Threshold ({noise_threshold})",
+        annotation_position="top right",
+        secondary_y=True
+    )
     # Update layout and axis titles
     fig.update_layout(
             title="Dual Axis Chart: Signal Strength and Noise",
@@ -540,7 +561,7 @@ def update_churn(time_range, region_val, node_val, fiber_val,
         return fig
     fig = px.line(filtered, x="recorded_at", y="Customer_Churn_Rate",
                      labels={"recorded_at": "Time", "Customer_Churn_Rate": "Churn/Retention (%)"})
-    threshold_value = 10
+    threshold_value = 8
 
     # Add a horizontal threshold line
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
