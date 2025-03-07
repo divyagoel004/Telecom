@@ -276,7 +276,7 @@ st.markdown(
         color: #000000 !important;
     }
     </style>
-    """,, unsafe_allow_html=True
+    """,unsafe_allow_html=True
 )
 
 def generate_overview_cards(filtered):
