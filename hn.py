@@ -273,7 +273,7 @@ st.markdown(
     """
     <style>
     /* Approach 1: target by data-testid */
-    button[data-testid="stButton"] {
+    button[data-testid="button"] {
         color: #000000 !important; /* black text */
     }
     </style>
