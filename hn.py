@@ -61,22 +61,22 @@ def transform_data(force=True):
     # Q = "select * from kpi"
     # with engine.connect() as conn:
     #     data = pd.read_sql(text(Q), conn)
-    data=pd.read_csv("fiber.csv",parse_dates=['recorded_at']) 
+    data=pd.read_csv("synthetic_fiber_data_with_truckroll.csv",parse_dates=['recorded_at']) 
     data['recorded_at'] = pd.to_datetime(data['recorded_at'])
     rows = 35000
     start_index = np.random.randint(0, rows - 50)
-    subset_index = range(start_index, start_index + 50)
+    subset_index = range(start_index, start_index + 100)
 
     # Generate 100 random timestamps within the last 24 hours.
     now = datetime.now()
     start_time = now - timedelta(hours=10)
-    start_ts = int(start_time.timestamp())
-    end_ts = int(now.timestamp())
-    random_ts = np.random.randint(start_ts, end_ts, 50)
-    random_times = pd.to_datetime(random_ts, unit='s')
+
+    continuous_times = pd.date_range(start=start_time, end=now, periods=50)
+
+   
 
     # Update the 'recorded_at' column for the selected 100 rows.
-    data.loc[subset_index, "recorded_at"] = random_times
+    data.loc[subset_index, "recorded_at"] = continuous_times
     return data
 df=transform_data()
 # -------------------- Voice-to-SQL Functions --------------------
