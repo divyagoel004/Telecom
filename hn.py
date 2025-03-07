@@ -270,14 +270,16 @@ def get_filtered_df(time_range, region_val, node_val, fiber_val, issue_val,
                         
 
 st.markdown(
-  """
+ """
     <style>
-    /* Target both common Streamlit button selectors */
-    .stButton button,
-    button[data-testid="stButton"],
-    button.css-1emrehy.edgvbvh3 { 
-         color: #000000 !important;
-         background-color: #FFFFFF !important; /* temporarily set background to white for contrast */
+    /* Critical Issues button */
+    div[data-testid="stButton"]:has(button[kind="secondary"]:nth-of-type(1)) button {
+        color: #000000 !important;
+    }
+    
+    /* Truck Rolls button */
+    div[data-testid="stButton"]:has(button[kind="secondary"]:nth-of-type(2)) button {
+        color: #000000 !important;
     }
     </style>
     """,unsafe_allow_html=True
