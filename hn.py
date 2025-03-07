@@ -64,15 +64,15 @@ def transform_data(force=True):
     data=pd.read_csv("fiber.csv",parse_dates=['recorded_at']) 
     data['recorded_at'] = pd.to_datetime(data['recorded_at'])
     rows = 35000
-    start_index = np.random.randint(0, rows - 500)
-    subset_index = range(start_index, start_index + 500)
+    start_index = np.random.randint(0, rows - 50)
+    subset_index = range(start_index, start_index + 50)
 
     # Generate 100 random timestamps within the last 24 hours.
     now = datetime.now()
-    start_time = now - timedelta(hours=72)
+    start_time = now - timedelta(hours=1)
     start_ts = int(start_time.timestamp())
     end_ts = int(now.timestamp())
-    random_ts = np.random.randint(start_ts, end_ts, 500)
+    random_ts = np.random.randint(start_ts, end_ts, 50)
     random_times = pd.to_datetime(random_ts, unit='s')
 
     # Update the 'recorded_at' column for the selected 100 rows.
