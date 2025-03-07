@@ -272,8 +272,9 @@ def get_filtered_df(time_range, region_val, node_val, fiber_val, issue_val,
 st.markdown(
    """
     <style>
-    button {
-        color: #000000 !important;
+    /* Target Streamlit buttons via their data-testid attribute */
+    div[data-testid="stButton"] > button {
+         color: #000000 !important;
     }
     </style>
     """,unsafe_allow_html=True
