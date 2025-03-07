@@ -448,7 +448,7 @@ def update_signal(time_range, region_val, node_val, fiber_val,
         go.Scatter(
                 x=filtered['recorded_at'], 
                 y=filtered['ONT_OLT_Signal_Strength'], 
-                mode='lines+marker',
+                mode='lines+markers',
                 name='Signal Strength',
                 line=dict(color='blue')
         ),
@@ -460,7 +460,7 @@ def update_signal(time_range, region_val, node_val, fiber_val,
         go.Scatter(
             x=filtered['recorded_at'], 
             y=filtered['Noise_dB'], 
-             mode='lines+marker',
+             mode='lines+markers',
             name='Noise',
             line=dict(color='red')
         ),
