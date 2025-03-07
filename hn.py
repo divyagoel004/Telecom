@@ -20,7 +20,24 @@ st.set_page_config(
     page_title="KPI Dashboard",
     layout="wide"  
 )
-
+st.markdown(
+    """
+    <style>
+    /* Change the background and text color for the main container */
+    .css-18e3th9 { 
+        background-color: #000000;
+    }
+    body {
+        background-color: #000000;
+        color: #FFFFFF;
+    }
+    /* Force text color for all paragraphs and headings */
+    h1, h2, h3, h4, h5, h6, p, li, span {
+        color: #FFFFFF !important;
+    }
+    </style>
+    """, unsafe_allow_html=True
+)
 
 # -------------------- Environment & Data Setup --------------------
 load_dotenv()
