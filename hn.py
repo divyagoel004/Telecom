@@ -276,6 +276,9 @@ st.markdown(
     div[data-testid="stButton"] > button {
          color: #000000 !important;
     }
+    span{
+        color: #FFFFFF !important;
+    }
     </style>
     """,unsafe_allow_html=True
 )
