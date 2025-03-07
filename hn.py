@@ -21,18 +21,22 @@ st.set_page_config(
     layout="wide"  
 )
 st.markdown(
-    """
+   """
     <style>
-    /* Change the background and text color for the main container */
-    .css-18e3th9 { 
-        background-color: #000000;
+    /* Main container background */
+    .reportview-container, .main, .block-container {
+        background-color: #000000 !important;
     }
+    /* Sidebar background */
+    .sidebar .sidebar-content {
+        background-color: #000000 !important;
+    }
+    /* Force background on body as well */
     body {
-        background-color: #000000;
-        color: #FFFFFF;
+        background-color: #000000 !important;
     }
-    /* Force text color for all paragraphs and headings */
-    h1, h2, h3, h4, h5, h6, p, li, span {
+    /* Override text color for headings, paragraphs, etc. */
+    h1, h2, h3, h4, h5, h6, p, span, li {
         color: #FFFFFF !important;
     }
     </style>
