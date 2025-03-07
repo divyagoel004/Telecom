@@ -21,28 +21,7 @@ st.set_page_config(
     layout="wide"  
 )
 
-st.markdown(
-    """
-    <style>
-    /* Main container background */
-    .reportview-container, .main, .block-container {
-        background-color: #000000 !important;
-    }
-    /* Sidebar background */
-    .sidebar .sidebar-content {
-        background-color: #000000 !important;
-    }
-    /* Force background on body as well */
-    body {
-        background-color: #000000 !important;
-    }
-    /* Override text color for headings, paragraphs, etc. */
-    h1, h2, h3, h4, h5, h6, p,span{
-        color: #FFFFFF !important;
-    }
-    </style>
-    """,    unsafe_allow_html=True
-)
+
 
 # -------------------- Environment & Data Setup --------------------
 load_dotenv()
@@ -270,23 +249,7 @@ def get_filtered_df(time_range, region_val, node_val, fiber_val, issue_val,
                         
 
 
-st.markdown(
-    """
-    <style>
-    /* Target Critical Issues and Truck Roll buttons in Tab 3 */
-    div[data-testid="stButton"] > button:contains("🚨 Critical Fiber Issues"),
-    div[data-testid="stButton"] > button:contains("🚚 Truck Rolls") {
-        color: #000000 !important;
-    }
-    
-    /* Make card content text black */
-    .stExpander [data-testid="stMarkdownContainer"] span {
-        color: #000000 !important;
-    }
-    </style>
-    """, 
-    unsafe_allow_html=True
-)
+
 def generate_overview_cards(filtered):
     # Store filtered data once per session
     if 'full_filtered_data' not in st.session_state:
