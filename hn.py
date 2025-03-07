@@ -474,7 +474,7 @@ def update_uptime(time_range, region_val, node_val, fiber_val,
     # Compute average uptime from the filtered DataFrame
     fig = px.bar(filtered, x="recorded_at", y="Uptime_Performance",
                   labels={"recorded_at": "Time", "Uptime_Performance": "Uptime_Performance (ms)"})
-    fig.update_traces(bar=dict(color='#2ca02c'))
+    
     return fig
     
 def update_bandwidth( time_range, region_val, node_val, fiber_val,
