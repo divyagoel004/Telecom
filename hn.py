@@ -472,30 +472,11 @@ def update_uptime(time_range, region_val, node_val, fiber_val,
         return fig
     
     # Compute average uptime from the filtered DataFrame
-    avg_uptime = filtered['Uptime_Performance'].mean()
-    
-    # Create a gauge chart using the Indicator trace.
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number",
-        value=avg_uptime,
-        domain={'x': [0, 1], 'y': [0, 1]},  # required domain specification
-        title={'text': "Average Uptime (%)"},
-        gauge={
-            'axis': {'range': [0, 100]},
-            'bar': {'color': "green"},
-            'steps': [
-                {'range': [0, 90], 'color': "red"},
-                {'range': [90, 95], 'color': "yellow"},
-                {'range': [95, 100], 'color': "green"}
-            ],
-            'threshold': {
-                'line': {'color': "black", 'width': 4},
-                'thickness': 0.75,
-                'value': avg_uptime
-            }
-        }
-    ))
+    fig = px.bar(filtered, x="recorded_at", y="Uptime_Performance",
+                  labels={"recorded_at": "Time", "Uptime_Performance": "Uptime_Performance (ms)"})
+    fig.update_traces(line=dict(color='#2ca02c'))
     return fig
+    
 def update_bandwidth( time_range, region_val, node_val, fiber_val,
                    issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
