@@ -267,6 +267,17 @@ def get_filtered_df(time_range, region_val, node_val, fiber_val, issue_val,
     if truck_roll_val:
         filtered = filtered[filtered["Truck_Roll_Decision"].isin(truck_roll_val)]
     return filtered
+st.markdown(
+    """
+    <style>
+    /* Target the default Streamlit button class */
+    .stButton > button {
+        color: #000000 !important; /* Force black text */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 def generate_overview_cards(filtered):
     # Store filtered data once per session
