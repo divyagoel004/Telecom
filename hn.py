@@ -20,27 +20,38 @@ st.set_page_config(
     page_title="KPI Dashboard",
     layout="wide"  
 )
+
 st.markdown(
-   """
+    """
     <style>
-    /* Main container background */
-    .reportview-container, .main, .block-container {
+    /* Main app background */
+    .block-container, .main, .reportview-container {
         background-color: #000000 !important;
     }
     /* Sidebar background */
     .sidebar .sidebar-content {
         background-color: #000000 !important;
     }
-    /* Force background on body as well */
-    body {
-        background-color: #000000 !important;
-    }
-    /* Override text color for headings, paragraphs, etc. */
-    h1, h2, h3, h4, h5, h6, p, span, li {
+    /* Force white text for headings, paragraphs, lists, etc. */
+    h1, h2, h3, h4, h5, h6, p, li, span, div, label, code {
         color: #FFFFFF !important;
     }
+    /* Style the st.button buttons */
+    .stButton > button {
+        background-color: #000000 !important;
+        color: #FFFFFF !important;
+        border: 1px solid #FFFFFF !important;
+    }
+    /* Style the selectboxes, text inputs, etc. */
+    .stTextInput > div > div > input,
+    .stSelectbox > div > div > select {
+        background-color: #000000 !important;
+        color: #FFFFFF !important;
+        border: 1px solid #FFFFFF !important;
+    }
     </style>
-    """, unsafe_allow_html=True
+    """,
+    unsafe_allow_html=True
 )
 
 # -------------------- Environment & Data Setup --------------------
