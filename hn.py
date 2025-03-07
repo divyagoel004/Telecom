@@ -394,7 +394,7 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
               annotation_text=f"Threshold ({threshold_value}%)", 
               annotation_position="top right")
     fig.update_traces(mode="lines+markers", 
-                      line=dict(width=4, color='##ff7f0e'),
+                      line=dict(width=4, color='#ff7f0e'),
                       marker=dict(size=8))
     return fig
 
