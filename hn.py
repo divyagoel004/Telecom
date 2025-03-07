@@ -61,7 +61,7 @@ def transform_data(force=True):
     # Q = "select * from kpi"
     # with engine.connect() as conn:
     #     data = pd.read_sql(text(Q), conn)
-    data=pd.read_csv("synthetic_fiber_data_with_truckroll.csv",parse_dates=['recorded_at']) 
+    data=pd.read_csv("new_sf.csv",parse_dates=['recorded_at']) 
     data['recorded_at'] = pd.to_datetime(data['recorded_at'])
     rows = 35000
     start_index = np.random.randint(0, rows - 100)
