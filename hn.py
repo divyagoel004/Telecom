@@ -269,22 +269,24 @@ def get_filtered_df(time_range, region_val, node_val, fiber_val, issue_val,
     return filtered
                         
 
+
 st.markdown(
- """
+    """
     <style>
-    /* Critical Issues button */
-    div[data-testid="stButton"]:has(button[kind="secondary"]:nth-of-type(1)) button {
+    /* Target Critical Issues and Truck Roll buttons in Tab 3 */
+    div[data-testid="stButton"] > button:contains("🚨 Critical Fiber Issues"),
+    div[data-testid="stButton"] > button:contains("🚚 Truck Rolls") {
         color: #000000 !important;
     }
     
-    /* Truck Rolls button */
-    div[data-testid="stButton"]:has(button[kind="secondary"]:nth-of-type(2)) button {
+    /* Make card content text black */
+    .stExpander [data-testid="stMarkdownContainer"] span {
         color: #000000 !important;
     }
     </style>
-    """,unsafe_allow_html=True
+    """, 
+    unsafe_allow_html=True
 )
-
 def generate_overview_cards(filtered):
     # Store filtered data once per session
     if 'full_filtered_data' not in st.session_state:
