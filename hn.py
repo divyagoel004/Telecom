@@ -37,7 +37,7 @@ st.markdown(
         background-color: #000000 !important;
     }
     /* Override text color for headings, paragraphs, etc. */
-    h1, h2, h3, h4, h5, h6, p,{
+    h1, h2, h3, h4, h5, h6, p,span{
         color: #FFFFFF !important;
     }
     </style>
