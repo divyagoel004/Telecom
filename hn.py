@@ -609,7 +609,7 @@ def update_callcenter( time_range, region_val, node_val, fiber_val,
         return fig
     fig = px.line(filtered, x="recorded_at", y="Complaint_Resolution_Time",
                       labels={"recorded_at": "Time", "kpi_value": "Call-Center Resolution Time"})
-    threshold_value = 150
+    threshold_value = 120
 
     # Add a horizontal threshold line
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
