@@ -393,7 +393,9 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
               annotation_text=f"Threshold ({threshold_value}%)", 
               annotation_position="top right")
-    fig.update_traces(marker=dict(color='#ff7f0e'))
+    fig.update_traces(mode="lines+markers", 
+                      line=dict(width=4, color='##ff7f0e'),
+                      marker=dict(size=8))
     return fig
 
 def update_packet_loss(time_range, region_val, node_val, fiber_val,
@@ -425,7 +427,9 @@ def update_latency(time_range, region_val, node_val, fiber_val,
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
               annotation_text=f"Threshold ({threshold_value}%)", 
               annotation_position="top right")
-    fig.update_traces(line=dict(color='#2ca02c'))
+    fig.update_traces(mode="lines+markers", 
+                      line=dict(width=4, color='#2ca02c'),
+                      marker=dict(size=8))
     return fig
 
 def update_signal(time_range, region_val, node_val, fiber_val,
@@ -444,7 +448,7 @@ def update_signal(time_range, region_val, node_val, fiber_val,
         go.Scatter(
                 x=filtered['recorded_at'], 
                 y=filtered['ONT_OLT_Signal_Strength'], 
-                mode='lines',
+                mode='lines+marker',
                 name='Signal Strength',
                 line=dict(color='blue')
         ),
@@ -456,13 +460,13 @@ def update_signal(time_range, region_val, node_val, fiber_val,
         go.Scatter(
             x=filtered['recorded_at'], 
             y=filtered['Noise_dB'], 
-             mode='lines',
+             mode='lines+marker',
             name='Noise',
             line=dict(color='red')
         ),
         secondary_y=True
     )
-    signal_threshold = 10   # Example threshold for Signal Strength on primary y-axis
+    signal_threshold = 5   # Example threshold for Signal Strength on primary y-axis
     noise_threshold = 2      # Example threshold for Noise on secondary y-axis
 
     # Add threshold line for Signal Strength
@@ -567,7 +571,9 @@ def update_churn(time_range, region_val, node_val, fiber_val,
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
               annotation_text=f"Threshold ({threshold_value}%)", 
               annotation_position="top right")
-    fig.update_traces(line=dict(color='#7f7f7f'))
+    fig.update_traces(mode="lines+markers", 
+                      line=dict(width=4, color='#7f7f7f'),
+                      marker=dict(size=8))
     return fig
 def update_sla( time_range, region_val, node_val, fiber_val,
                     issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -597,7 +603,9 @@ def update_firstfix( time_range, region_val, node_val, fiber_val,
         fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
               annotation_text=f"Threshold ({threshold_value}%)", 
               annotation_position="top right")
-        fig.update_traces(marker=dict(color='#bcbd22'))
+        fig.update_traces(mode="lines+markers", 
+                      line=dict(width=4, color='#bcbd22'),
+                      marker=dict(size=8))
         return fig
 def update_callcenter( time_range, region_val, node_val, fiber_val,
                    issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -615,7 +623,9 @@ def update_callcenter( time_range, region_val, node_val, fiber_val,
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
               annotation_text=f"Threshold ({threshold_value}%)", 
               annotation_position="top right")
-    fig.update_traces(line=dict(color='#d62728'))
+    fig.update_traces(mode="lines+markers", 
+                      line=dict(width=4, color='#d62728'),
+                      marker=dict(size=8))
     return fig
 def update_selfservice( time_range, region_val, node_val, fiber_val,
                    issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -659,6 +669,9 @@ def update_ticketclosure( time_range, region_val, node_val, fiber_val,
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
               annotation_text=f"Threshold ({threshold_value}%)", 
               annotation_position="top right")
+    fig.update_traces(mode="lines+markers", 
+                      line=dict(width=4, color='#d62728'),
+                      marker=dict(size=8))                 
     return fig
 def update_planned(time_range, region_val, node_val, fiber_val,
                     issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
