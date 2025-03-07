@@ -71,7 +71,7 @@ def transform_data(force=True):
     now = datetime.now()
     start_time = now - timedelta(hours=10)
 
-    continuous_times = pd.date_range(start=start_time, end=now, periods=50)
+    continuous_times = pd.date_range(start=start_time, end=now, periods=100)
 
    
 
