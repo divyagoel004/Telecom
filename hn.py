@@ -171,6 +171,7 @@ Return ONLY the SQL code, no explanations.
     model="llama-3.3-70b-versatile",
     )
     sql_query = response.choices[0].message.content.replace("```sql", "").replace("```", "").strip()
+    st.write(sql_query)
     return sql_query
 
 def fetch_data(query):
