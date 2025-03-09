@@ -188,8 +188,12 @@ def fetch_data(query):
         # Validate results
         if not isinstance(result, pd.DataFrame):
             raise ValueError("Query did not return a valid DataFrame")
+        if result:
+            return result
+        else:
+            return "Wrong query"
             
-        return result
+        # return result
         
     except Exception as e:
         st.error(f"Query Execution Error: {str(e)}")
