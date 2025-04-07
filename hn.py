@@ -640,8 +640,8 @@ def update_signal(time_range, region_val, node_val, fiber_val,
         annotation_position="top right",
         secondary_y=True
     )
-    fig = add_threshold_click_behavior(fig, filtered, 'ONT_OLT_Signal_Strength', signal_threshold, secondary_y=False)
-    fig = add_threshold_click_behavior(fig, filtered, 'Noise_dB', noise_threshold, secondary_y=True)
+    fig = add_threshold_click_behavior(fig, filtered, 'ONT_OLT_Signal_Strength', signal_threshold)
+    fig = add_threshold_click_behavior(fig, filtered, 'Noise_dB', noise_threshold)
 
     fig.update_layout(
         title="Dual Axis Chart: Signal Strength and Noise",
@@ -987,7 +987,10 @@ tabs = st.tabs(["Network Health KPIs", "Customer Experience KPIs", "Operational 
 def get_instruction(metric, snippet):
     metric_display = metric.replace('_', ' ').title()
     return (
-      snippet
+      f"For {metric_display} CSV: {snippet}\n"
+       "Please provide the answer in exactly two parts without any extra paragraphs or commentary.\n"
+       "1. Direct Root Cause (a brief sentence):\n"
+       "2. Direct Solution (a brief sentence):\n"
 
 
     )
