@@ -987,11 +987,9 @@ tabs = st.tabs(["Network Health KPIs", "Customer Experience KPIs", "Operational 
 def get_instruction(metric, snippet):
     metric_display = metric.replace('_', ' ').title()
     return (
-        "The CSV file contains network measurement data related to synthetic fiber with truckroll data. "
-        f"Please analyze the snippet below and provide your analysis in two main sections with the metric '{metric_display}' in focus:\n\n"
-       
-        f"Analyze the CSV snippet below. Focus on the first spike in {metric_display}. Identify its root cause and propose a concise, specific solution. Use as few tokens as possible. CSV snippet:\n{snippet}"
-       
+      f"For {metric_display} CSV: {snippet}
+Identify first spike, root cause, and solution.
+Minimal tokens."
     )
 
 # Add this conditional sidebar content at the end of the main code
