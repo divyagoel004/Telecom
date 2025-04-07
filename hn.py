@@ -993,7 +993,7 @@ with st.container():
 st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown('<div class="insight-btn">', unsafe_allow_html=True)
-if st.button("📊 Insight Analysis"):
+if st.button("📊 Data Insight and there Analysis"):
     st.session_state.show_insight = not st.session_state.get('show_insight', False)
 st.markdown('</div>', unsafe_allow_html=True)
 # Create Tabs for different KPI categories
