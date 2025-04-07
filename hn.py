@@ -539,13 +539,12 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
         fig.update_layout(title="No data available for Fiber Utilization Rate")
         return fig
     fig = px.line(filtered, x="recorded_at", y="Fiber_Utilization",
-                       labels={"recorded_at": "Time", "Fiber_Utilization_Rate": "Utilization (%)"})
+                  labels={"recorded_at": "Time", "Fiber_Utilization": "Utilization (%)"})
     threshold_value = 80
-
     # Add a horizontal threshold line
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
-              annotation_text=f"Threshold ({threshold_value}%)", 
-              annotation_position="top right")
+                  annotation_text=f"Threshold ({threshold_value}%)", 
+                  annotation_position="top right")
     fig.update_traces(mode="lines+markers", 
                       line=dict(width=4, color='#9467bd'),
                       marker=dict(size=8))
@@ -575,11 +574,10 @@ def update_latency(time_range, region_val, node_val, fiber_val,
     fig = px.line(filtered, x="recorded_at", y="Latency_ms",
                   labels={"recorded_at": "Time", "Latency_ms": "Latency (ms)"})
     threshold_value = 75
-
     # Add a horizontal threshold line
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
-              annotation_text=f"Threshold ({threshold_value}%)", 
-              annotation_position="top right")
+                  annotation_text=f"Threshold ({threshold_value})", 
+                  annotation_position="top right")
     fig.update_traces(mode="lines+markers", 
                       line=dict(width=4, color='#2ca02c'),
                       marker=dict(size=8))
