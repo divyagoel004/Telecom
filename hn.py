@@ -175,9 +175,9 @@ Based on these metrics and conditions, please provide:
             {"role": "system", "content": "you are a Telecom expert assistant."},
             {"role": "user", "content": prompt}
         ],
-        model="llama-3.3-70b-versatile",
+        model="llama-3.1-8b-instant",
         temperature=0.5,
-        max_completion_tokens=1024,
+       
         top_p=1,
         stream=False,
     )
