@@ -640,6 +640,9 @@ def update_signal(time_range, region_val, node_val, fiber_val,
         annotation_position="top right",
         secondary_y=True
     )
+    fig = add_threshold_click_behavior(fig, filtered, 'ONT_OLT_Signal_Strength', signal_threshold, secondary_y=False)
+    fig = add_threshold_click_behavior(fig, filtered, 'Noise_dB', noise_threshold, secondary_y=True)
+
     fig.update_layout(
         title="Dual Axis Chart: Signal Strength and Noise",
         xaxis_title="Recorded At",
