@@ -99,6 +99,152 @@ def recognize_speech():
         st.session_state.text = text
 
     return st.session_state.text
+def generate_llm_solution(data_row):
+    """
+    Generate a solution using LLM when threshold is crossed
+    
+    Args:
+        data_row: A pandas Series or dict containing the complete row data
+        
+    Returns:
+        str: Generated solution or error message
+    """
+    try:
+        # Convert the data row to a string representation
+        if hasattr(data_row, 'to_dict'):
+            data = data_row.to_dict()
+        else:
+            data = dict(data_row)
+            
+        # Format the prompt for the LLM
+        prompt = f"""
+        The following network metrics have exceeded their threshold values:
+        
+        Timestamp: {data.get('recorded_at')}
+        Region: {data.get('Region', 'Unknown')}
+        Node: {data.get('Node', 'Unknown')}
+        
+        Metrics:
+        - Fiber Utilization: {data.get('Fiber_Utilization', 'N/A')}%
+        - Latency: {data.get('Latency_ms', 'N/A')} ms
+        - Signal Strength: {data.get('ONT_OLT_Signal_Strength', 'N/A')}
+        - Noise: {data.get('Noise_dB', 'N/A')} dB
+        
+        Issue Type: {data.get('Issue_Type', 'Unknown')}
+        Weather Condition: {data.get('Weather', 'Unknown')}
+        Service Type: {data.get('Service', 'Unknown')}
+        
+        Based on these metrics and conditions, please provide:
+        1. A diagnosis of the likely network issue
+        2. Recommended troubleshooting steps
+        3. Potential solutions to resolve the issue
+        """
+        
+        # Using Together API (uncomment and use your API key)
+        try:
+            response = requests.post(
+                "https://api.together.xyz/v1/completions",
+                headers={
+                    "Authorization": "a566a4825abfe3bf9a18dc844ea8275bf9496105475b3a7211862ccc51a22316",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": "mistralai/Mixtral-8x7B-Instruct-v0.1",
+                    "prompt": prompt,
+                    "max_tokens": 500,
+                    "temperature": 0.7
+                }
+            )
+            if response.status_code == 200:
+                return response.json()["choices"][0]["text"].strip()
+            else:
+                # Fall back to Grok API if Together API fails
+                raise Exception(f"Together API Error: {response.status_code}")
+                
+        except Exception as e:
+            # Using Grok API as fallback
+            response = requests.post(
+                "https://api.grok.ai/v1/chat/completions",
+                headers={
+                    "Authorization": "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",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "messages": [{"role": "user", "content": prompt}],
+                    "max_tokens": 500,
+                    "temperature": 0.7
+                }
+            )
+            if response.status_code == 200:
+                return response.json()["choices"][0]["message"]["content"].strip()
+            else:
+                raise Exception(f"Grok API Error: {response.status_code}")
+                
+    except Exception as e:
+        return f"Error generating solution: {str(e)}"
+
+
+def add_threshold_click_behavior(fig, df, y_column, threshold_value):
+    """
+    Add click behavior to show LLM solutions when threshold is crossed
+    
+    Args:
+        fig: Plotly figure object
+        df: Dataframe with the data
+        y_column: The column name being plotted on y-axis
+        threshold_value: The threshold value for this metric
+        
+    Returns:
+        Updated figure with click behavior
+    """
+    # Filter points where the value exceeds the threshold
+    threshold_exceeded = df[df[y_column] > threshold_value]
+    
+    if not threshold_exceeded.empty:
+        # Add markers for threshold violations
+        fig.add_trace(
+            go.Scatter(
+                x=threshold_exceeded['recorded_at'],
+                y=threshold_exceeded[y_column],
+                mode='markers',
+                marker=dict(
+                    size=12, 
+                    color='red',
+                    symbol='circle-open',
+                    line=dict(width=2)
+                ),
+                name='Threshold Violated',
+                hoverinfo='text',
+                hovertext=[f"Threshold Violated<br>Click for solution<br>{y_column}: {val}" 
+                          for val in threshold_exceeded[y_column]],
+                customdata=threshold_exceeded.index.tolist()
+            )
+        )
+        
+        # Store the dataframe as a hidden div for access in callback
+        # This would need to be implemented differently based on your framework (Dash, Streamlit, etc.)
+        # For demonstration, we'll use fig.data attributes to store this information
+        
+        # Update layout for click events
+        fig.update_layout(
+            clickmode='event+select',
+            annotations=[
+                dict(
+                    x=0.5,
+                    y=1.05,
+                    xref="paper",
+                    yref="paper",
+                    text="Click on red markers to see AI-generated solutions",
+                    showarrow=False,
+                    font=dict(size=12)
+                )
+            ]
+        )
+    
+    return fig
+
+
+
 def generate_sql(query):
     schema = '''kpi(Fiber_Type, Cable_Length_km, Used_Fiber_Strands, Unused_Fiber_Strands,
       Installation_Date, Connector_Type, Patch_Panel_Type, Measurement_Time, Optical_Power_dBm, Optical_Loss_dB,
@@ -393,7 +539,6 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
     fig = px.line(filtered, x="recorded_at", y="Fiber_Utilization",
                        labels={"recorded_at": "Time", "Fiber_Utilization_Rate": "Utilization (%)"})
     threshold_value = 80
-
     # Add a horizontal threshold line
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
               annotation_text=f"Threshold ({threshold_value}%)", 
@@ -401,6 +546,10 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
     fig.update_traces(mode="lines+markers", 
                       line=dict(width=4, color='#9467bd'),
                       marker=dict(size=8))
+    
+    # Add threshold click behavior
+    fig = add_threshold_click_behavior(fig, filtered, "Fiber_Utilization", threshold_value)
+    
     return fig
 
 def update_packet_loss(time_range, region_val, node_val, fiber_val,
