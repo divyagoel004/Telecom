@@ -126,48 +126,50 @@ def recognize_speech():
         st.session_state.text = text
 
     return st.session_state.text
+import os
+from groq import Groq  # Ensure this import matches your actual package structure
+
 def generate_llm_solution(data_row):
     """
-    Generate a solution using LLM when threshold is crossed
+    Generate a solution using LLM when threshold is crossed.
     
     Args:
-        data_row: A pandas Series or dict containing the complete row data
+        data_row: A pandas Series or dict containing the complete row data.
         
     Returns:
-        str: Generated solution or error message
+        str: Generated solution or error message.
     """
-   
-        # Convert the data row to a string representation
+    # Convert the data row to a dictionary representation
     if hasattr(data_row, 'to_dict'):
-            data = data_row.to_dict()
+        data = data_row.to_dict()
     else:
-            data = dict(data_row)
-            
-        # Format the prompt for the LLM
-    client=Groq(api_key=os.getenv("GROQ_API_KEY"))
+        data = dict(data_row)
+    
+    # Format the prompt for the LLM
+    client = Groq(api_key=os.getenv("GROQ_API_KEY"))
     prompt = f"""
-        The following network metrics have exceeded their threshold values:
-        
-        Timestamp: {data.get('recorded_at')}
-        Region: {data.get('Region', 'Unknown')}
-        Node: {data.get('Node', 'Unknown')}
-        
-        Metrics:
-        - Fiber Utilization: {data.get('Fiber_Utilization', 'N/A')}%
-        - Latency: {data.get('Latency_ms', 'N/A')} ms
-        - Signal Strength: {data.get('ONT_OLT_Signal_Strength', 'N/A')}
-        - Noise: {data.get('Noise_dB', 'N/A')} dB
-        
-        Issue Type: {data.get('Issue_Type', 'Unknown')}
-        Weather Condition: {data.get('Weather', 'Unknown')}
-        Service Type: {data.get('Service', 'Unknown')}
-        
-        Based on these metrics and conditions, please provide:
-        1. A diagnosis of the likely network issue
-        2. Recommended troubleshooting steps
-        3. Potential solutions to resolve the issue
-        """
-        
+The following network metrics have exceeded their threshold values:
+
+Timestamp: {data.get('recorded_at')}
+Region: {data.get('Region', 'Unknown')}
+Node: {data.get('Node', 'Unknown')}
+
+Metrics:
+- Fiber Utilization: {data.get('Fiber_Utilization', 'N/A')}%
+- Latency: {data.get('Latency_ms', 'N/A')} ms
+- Signal Strength: {data.get('ONT_OLT_Signal_Strength', 'N/A')}
+- Noise: {data.get('Noise_dB', 'N/A')} dB
+
+Issue Type: {data.get('Issue_Type', 'Unknown')}
+Weather Condition: {data.get('Weather', 'Unknown')}
+Service Type: {data.get('Service', 'Unknown')}
+
+Based on these metrics and conditions, please provide:
+1. A diagnosis of the likely network issue
+2. Recommended troubleshooting steps
+3. Potential solutions to resolve the issue
+    """
+    
     response = client.chat.completions.create(
         messages=[
             {"role": "system", "content": "you are a Telecom expert assistant."},
@@ -179,9 +181,9 @@ def generate_llm_solution(data_row):
         top_p=1,
         stream=False,
     )
+    
+    # Return the first two lines of the generated solution
     return "\n".join(response.choices[0].message.content.splitlines()[:2])
-
-
 
 def add_threshold_click_behavior(fig, df, y_column, threshold_value):
     """
