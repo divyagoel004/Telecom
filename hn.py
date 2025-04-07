@@ -129,125 +129,125 @@ def recognize_speech():
 import os
 from groq import Groq  # Ensure this import matches your actual package structure
 
-def generate_llm_solution(data_row):
-    """
-    Generate a solution using LLM when threshold is crossed.
+# def generate_llm_solution(data_row):
+#     """
+#     Generate a solution using LLM when threshold is crossed.
     
-    Args:
-        data_row: A pandas Series or dict containing the complete row data.
+#     Args:
+#         data_row: A pandas Series or dict containing the complete row data.
         
-    Returns:
-        str: Generated solution or error message.
-    """
-    # Convert the data row to a dictionary representation
-    if hasattr(data_row, 'to_dict'):
-        data = data_row.to_dict()
-    else:
-        data = dict(data_row)
+#     Returns:
+#         str: Generated solution or error message.
+#     """
+#     # Convert the data row to a dictionary representation
+#     if hasattr(data_row, 'to_dict'):
+#         data = data_row.to_dict()
+#     else:
+#         data = dict(data_row)
     
-    # Format the prompt for the LLM
-    client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-    prompt = f"""
-The following network metrics have exceeded their threshold values:
+#     # Format the prompt for the LLM
+#     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+#     prompt = f"""
+# The following network metrics have exceeded their threshold values:
 
-Timestamp: {data.get('recorded_at')}
-Region: {data.get('Region', 'Unknown')}
-Node: {data.get('Node', 'Unknown')}
+# Timestamp: {data.get('recorded_at')}
+# Region: {data.get('Region', 'Unknown')}
+# Node: {data.get('Node', 'Unknown')}
 
-Metrics:
-- Fiber Utilization: {data.get('Fiber_Utilization', 'N/A')}%
-- Latency: {data.get('Latency_ms', 'N/A')} ms
-- Signal Strength: {data.get('ONT_OLT_Signal_Strength', 'N/A')}
-- Noise: {data.get('Noise_dB', 'N/A')} dB
+# Metrics:
+# - Fiber Utilization: {data.get('Fiber_Utilization', 'N/A')}%
+# - Latency: {data.get('Latency_ms', 'N/A')} ms
+# - Signal Strength: {data.get('ONT_OLT_Signal_Strength', 'N/A')}
+# - Noise: {data.get('Noise_dB', 'N/A')} dB
 
-Issue Type: {data.get('Issue_Type', 'Unknown')}
-Weather Condition: {data.get('Weather', 'Unknown')}
-Service Type: {data.get('Service', 'Unknown')}
+# Issue Type: {data.get('Issue_Type', 'Unknown')}
+# Weather Condition: {data.get('Weather', 'Unknown')}
+# Service Type: {data.get('Service', 'Unknown')}
 
-Based on these metrics and conditions, please provide:
-1. A diagnosis of the likely network issue
-2. Recommended troubleshooting steps
-3. Potential solutions to resolve the issue
-    """
+# Based on these metrics and conditions, please provide:
+# 1. A diagnosis of the likely network issue
+# 2. Recommended troubleshooting steps
+# 3. Potential solutions to resolve the issue
+#     """
     
-    response = client.chat.completions.create(
-        messages=[
-            {"role": "system", "content": "you are a Telecom expert assistant."},
-            {"role": "user", "content": prompt}
-        ],
-        model="llama-3.3-70b-versatile",
-        temperature=0.5,
-        max_completion_tokens=1024,
-        top_p=1,
-        stream=False,
-    )
+#     response = client.chat.completions.create(
+#         messages=[
+#             {"role": "system", "content": "you are a Telecom expert assistant."},
+#             {"role": "user", "content": prompt}
+#         ],
+#         model="llama-3.3-70b-versatile",
+#         temperature=0.5,
+#         max_completion_tokens=1024,
+#         top_p=1,
+#         stream=False,
+#     )
     
-    # Return the first two lines of the generated solution
-    return "\n".join(response.choices[0].message.content.splitlines()[:2])
+#     # Return the first two lines of the generated solution
+#     return "\n".join(response.choices[0].message.content.splitlines()[:2])
 
-def add_threshold_click_behavior(fig, df, y_column, threshold_value):
-    """
-    Add click behavior to show LLM solutions when threshold is crossed.
-    This version precomputes the LLM-generated solution for each threshold violation
-    and sets it as the hovertext for that marker.
+# def add_threshold_click_behavior(fig, df, y_column, threshold_value):
+#     """
+#     Add click behavior to show LLM solutions when threshold is crossed.
+#     This version precomputes the LLM-generated solution for each threshold violation
+#     and sets it as the hovertext for that marker.
 
-    Args:
-        fig: Plotly figure object
-        df: Dataframe with the data
-        y_column: The column name being plotted on y-axis
-        threshold_value: The threshold value for this metric
+#     Args:
+#         fig: Plotly figure object
+#         df: Dataframe with the data
+#         y_column: The column name being plotted on y-axis
+#         threshold_value: The threshold value for this metric
 
-    Returns:
-        Updated figure with hovertext containing LLM solutions.
-    """
-    # Filter points where the value exceeds the threshold
-    threshold_exceeded = df[df[y_column] > threshold_value]
+#     Returns:
+#         Updated figure with hovertext containing LLM solutions.
+#     """
+#     # Filter points where the value exceeds the threshold
+#     threshold_exceeded = df[df[y_column] > threshold_value]
     
-    if not threshold_exceeded.empty:
-        # Precompute LLM solution for each row that violates the threshold
-        hovertexts = []
-        for idx, row in threshold_exceeded.iterrows():
-            solution = generate_llm_solution(row)
-            # You can format or truncate the solution if needed for hovertext display
-            hovertext = f"Threshold Violated<br>{y_column}: {row[y_column]}<br>Solution: {solution}"
-            hovertexts.append(hovertext)
+#     if not threshold_exceeded.empty:
+#         # Precompute LLM solution for each row that violates the threshold
+#         hovertexts = []
+#         for idx, row in threshold_exceeded.iterrows():
+#             solution = generate_llm_solution(row)
+#             # You can format or truncate the solution if needed for hovertext display
+#             hovertext = f"Threshold Violated<br>{y_column}: {row[y_column]}<br>Solution: {solution}"
+#             hovertexts.append(hovertext)
         
-        # Add markers for threshold violations with the computed hovertexts
-        fig.add_trace(
-            go.Scatter(
-                x=threshold_exceeded['recorded_at'],
-                y=threshold_exceeded[y_column],
-                mode='markers',
-                marker=dict(
-                    size=12, 
-                    color='red',
-                    symbol='circle-open',
-                    line=dict(width=2)
-                ),
-                name='Threshold Violated',
-                hoverinfo='text',
-                hovertext=hovertexts,
-                customdata=threshold_exceeded.index.tolist()
-            )
-        )
+#         # Add markers for threshold violations with the computed hovertexts
+#         fig.add_trace(
+#             go.Scatter(
+#                 x=threshold_exceeded['recorded_at'],
+#                 y=threshold_exceeded[y_column],
+#                 mode='markers',
+#                 marker=dict(
+#                     size=12, 
+#                     color='red',
+#                     symbol='circle-open',
+#                     line=dict(width=2)
+#                 ),
+#                 name='Threshold Violated',
+#                 hoverinfo='text',
+#                 hovertext=hovertexts,
+#                 customdata=threshold_exceeded.index.tolist()
+#             )
+#         )
         
-        # Update layout to encourage users to hover over the markers
-        fig.update_layout(
-            clickmode='event+select',
-            annotations=[
-                dict(
-                    x=0.5,
-                    y=1.05,
-                    xref="paper",
-                    yref="paper",
-                    text="Hover on red markers to see AI-generated solutions",
-                    showarrow=False,
-                    font=dict(size=12)
-                )
-            ]
-        )
+#         # Update layout to encourage users to hover over the markers
+#         fig.update_layout(
+#             clickmode='event+select',
+#             annotations=[
+#                 dict(
+#                     x=0.5,
+#                     y=1.05,
+#                     xref="paper",
+#                     yref="paper",
+#                     text="Hover on red markers to see AI-generated solutions",
+#                     showarrow=False,
+#                     font=dict(size=12)
+#                 )
+#             ]
+#         )
     
-    return fig
+#     return fig
 
 
 def generate_sql(query):
