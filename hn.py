@@ -190,7 +190,7 @@ def generate_llm_solution(data_row):
                 
         except Exception as e:
             # Using Grok API as fallback
-            response = = client.chat.completions.create(
+            response =  client.chat.completions.create(
         messages=[
             {"role": "system", "content": "you are a Telecom expert assistant."},
             {"role": "user", "content": prompt}
