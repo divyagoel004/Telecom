@@ -1027,7 +1027,7 @@ if st.session_state.get('show_insight', False):
 
         # Generate analysis
         data=transform_data()
-        csv_snippet = data.head(100).to_csv(index=False)
+        csv_snippet = data.head(10).to_csv(index=False)
         instruction = get_instruction(selected_option, csv_snippet)
         
         try:
