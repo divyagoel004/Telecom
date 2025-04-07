@@ -987,7 +987,7 @@ tabs = st.tabs(["Network Health KPIs", "Customer Experience KPIs", "Operational 
 def get_instruction(metric, snippet):
     metric_display = metric.replace('_', ' ').title()
     return (
-      f"For {metric_display} CSV: {snippet}\nRoot Cause:\n{{root_cause}}\nSolution:\n{{solution}}"
+      snippet
 
     )
 
