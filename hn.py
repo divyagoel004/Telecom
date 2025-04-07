@@ -969,7 +969,89 @@ st.markdown("</div>", unsafe_allow_html=True)
 
 # Create Tabs for different KPI categories
 tabs = st.tabs(["Network Health KPIs", "Customer Experience KPIs", "Operational KPIs", "Comprehensive Overview", "Voice SQL Dashboard"])
+# Add this CSS at the top after imports
+st.markdown("""
+<style>
+.insight-btn {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    z-index: 999;
+}
+</style>
+""", unsafe_allow_html=True)
 
+# Add this in your header section
+st.markdown('<div class="insight-btn">', unsafe_allow_html=True)
+if st.button("📊 Insight Analysis"):
+    st.session_state.show_insight = not st.session_state.get('show_insight', False)
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Add this function definition in the main code
+def get_instruction(metric, snippet):
+    metric_display = metric.replace('_', ' ').title()
+    return (
+        "The CSV file contains network measurement data related to synthetic fiber with truckroll data. "
+        f"Please analyze the snippet below and provide your analysis in two main sections with the metric '{metric_display}' in focus:\n\n"
+        "• Cause:\n"
+        f"  - Identify the underlying factors affecting {metric_display}.\n"
+        "  - List the key reasons as bullet points.\n\n"
+        "• Solution:\n"
+        f"  - Provide corresponding solutions to address the issues affecting {metric_display}.\n"
+        "  - List the recommended actions as bullet points.\n\n"
+        f"CSV snippet:\n{snippet}\n\n"
+        "Focus your analysis on the provided data."
+    )
+
+# Add this conditional sidebar content at the end of the main code
+if st.session_state.get('show_insight', False):
+    with st.sidebar:
+        st.markdown("<h1 style='text-align: center; color: #2E86C1;'>📊 Insight Analysis</h1>", unsafe_allow_html=True)
+        
+        # Metric selection
+        metric_display_names = {
+            "Packet_Loss_Percent": "📉 Packet Loss (%)",
+            "Customer_Satisfaction_Score": "😊 Customer Satisfaction",
+            "Truck_Roll_Requirement": "🚚 Truck Roll Requirement",
+            "Signal_Degradation_Rate_Percent": "📶 Signal Degradation (%)",
+            "Churn_Ratio": "🔁 Customer Churn Ratio",
+            "Fiber_Utilization_Rate": "📈 Fiber Utilization Rate",
+            "Customer_SLA_Priority": "🏷️ SLA Priority Level",
+            "Customer_Complaints": "📞 Customer Complaints",
+            "Power_Supply_Stability": "🔋 Power Supply Stability",
+            "Avg_Downtime_per_Fault_min": "⏱️ Avg Downtime per Fault (min)",
+            "Recent_Fiber_Breaks": "⚡ Recent Fiber Breaks",
+            "Latency_ms": "⌛ Network Latency (ms)",
+            "Optical_Loss_dB": "🔦 Optical Signal Loss (dB)",
+        }
+        
+        display_to_metric = {v: k for k, v in metric_display_names.items()}
+        selected_display = st.radio(
+            "Select Metric:",
+            options=list(metric_display_names.values()),
+            index=0
+        )
+        selected_option = display_to_metric[selected_display]
+
+        # Generate analysis
+        csv_snippet = df.head(10).to_csv(index=False)
+        instruction = get_instruction(selected_option, csv_snippet)
+        
+        try:
+            chat_completion = groq_client.chat.completions.create(
+                messages=[
+                    {"role": "system", "content": "You are a Telecom expert assistant."},
+                    {"role": "user", "content": instruction}
+                ],
+                model="llama3-70b-8192",
+                temperature=0.5,
+                max_tokens=1024
+            )
+            st.markdown("#### Analysis Results")
+            st.write(chat_completion.choices[0].message.content)
+            
+        except Exception as e:
+            st.error(f"Analysis error: {str(e)}")
 # -------------------- Network Health KPIs Tab --------------------
 with tabs[0]:
     st.header("Network Health KPIs")
