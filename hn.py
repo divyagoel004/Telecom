@@ -585,7 +585,7 @@ def update_latency(time_range, region_val, node_val, fiber_val,
     fig.update_traces(mode="lines+markers", 
                       line=dict(width=4, color='#2ca02c'),
                       marker=dict(size=8))
-    fig = add_threshold_click_behavior(fig, filtered, "Latency", threshold_value)
+    fig = add_threshold_click_behavior(fig, filtered, "Latency_ms", threshold_value)
     return fig
 
 def update_signal(time_range, region_val, node_val, fiber_val,
@@ -725,7 +725,7 @@ def update_churn(time_range, region_val, node_val, fiber_val,
     fig.update_traces(mode="lines+markers", 
                       line=dict(width=4, color='#7f7f7f'),
                       marker=dict(size=8))
-    fig = add_threshold_click_behavior(fig, filtered, "Churn_Prediction", threshold_value)
+    fig = add_threshold_click_behavior(fig, filtered, "Customer_Churn_Rate", threshold_value)
     return fig
 def update_sla( time_range, region_val, node_val, fiber_val,
                     issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -759,7 +759,7 @@ def update_firstfix( time_range, region_val, node_val, fiber_val,
                       line=dict(width=4, color='#bcbd22'),
                           
                       marker=dict(size=8))
-        fig = add_threshold_click_behavior(fig, filtered, "First-Fix", threshold_value)
+        fig = add_threshold_click_behavior(fig, filtered, "First_Fix_Rate", threshold_value)
         return fig
 def update_callcenter( time_range, region_val, node_val, fiber_val,
                    issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -780,7 +780,7 @@ def update_callcenter( time_range, region_val, node_val, fiber_val,
     fig.update_traces(mode="lines+markers", 
                       line=dict(width=4, color='#d62728'),
                       marker=dict(size=8))
-    fig = add_threshold_click_behavior(fig, filtered, "Call-Center Response", threshold_value)
+    fig = add_threshold_click_behavior(fig, filtered, "Complaint_Resolution_Time", threshold_value)
     return fig
 def update_selfservice( time_range, region_val, node_val, fiber_val,
                    issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
@@ -827,7 +827,7 @@ def update_ticketclosure( time_range, region_val, node_val, fiber_val,
     fig.update_traces(mode="lines+markers", 
                       line=dict(width=4, color='#d62728'),
                       marker=dict(size=8)) 
-    fig = add_threshold_click_behavior(fig, filtered, "Ticket-Closure", threshold_value)
+    fig = add_threshold_click_behavior(fig, filtered, "Ticket_Closure_Rate", threshold_value)
     return fig
 def update_planned(time_range, region_val, node_val, fiber_val,
                     issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
