@@ -167,30 +167,7 @@ def generate_llm_solution(data_row):
         3. Potential solutions to resolve the issue
         """
         
-        # Using Together API (uncomment and use your API key)
-        try:
-            response = requests.post(
-                "https://api.together.xyz/v1/completions",
-                headers={
-                    "Authorization": "a566a4825abfe3bf9a18dc844ea8275bf9496105475b3a7211862ccc51a22316",
-                    "Content-Type": "application/json"
-                },
-                json={
-                    "model": "mistralai/Mixtral-8x7B-Instruct-v0.1",
-                    "prompt": prompt,
-                    "max_tokens": 500,
-                    "temperature": 0.7
-                }
-            )
-            if response.status_code == 200:
-                return response.json()["choices"][0]["text"].strip()
-            else:
-                # Fall back to Grok API if Together API fails
-                raise Exception(f"Together API Error: {response.status_code}")
-                
-        except Exception as e:
-            # Using Grok API as fallback
-            response =  groq_client.chat.completions.create(
+        response =  groq_client.chat.completions.create(
         messages=[
             {"role": "system", "content": "you are a Telecom expert assistant."},
             {"role": "user", "content": prompt}
@@ -201,13 +178,7 @@ def generate_llm_solution(data_row):
         top_p=1,
         stream=False,
     )
-            if response.status_code == 200:
-                return response.json()["choices"][0]["message"]["content"].strip()
-            else:
-                raise Exception(f"Grok API Error: {response.status_code}")
-                
-    except Exception as e:
-        return f"Error generating solution: {str(e)}"
+    return chat_completion.choices[0].message.content[100]
 
 
 def add_threshold_click_behavior(fig, df, y_column, threshold_value):
