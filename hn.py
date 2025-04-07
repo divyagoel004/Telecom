@@ -1041,7 +1041,7 @@ if st.session_state.get('show_insight', False):
             )
                         
             st.markdown("#### Analysis Results")
-            st.write(chat_completion.choices[0].message.content)
+            st.write(response.choices[0].message.content)
             
         except Exception as e:
             st.error(f"Analysis error: {str(e)}")
