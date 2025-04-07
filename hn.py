@@ -126,59 +126,59 @@ def recognize_speech():
         st.session_state.text = text
 
     return st.session_state.text
-# def generate_llm_solution(data_row):
-#     """
-#     Generate a solution using LLM when threshold is crossed
+def generate_llm_solution(data_row):
+    """
+    Generate a solution using LLM when threshold is crossed
     
-#     Args:
-#         data_row: A pandas Series or dict containing the complete row data
+    Args:
+        data_row: A pandas Series or dict containing the complete row data
         
-#     Returns:
-#         str: Generated solution or error message
-#     """
+    Returns:
+        str: Generated solution or error message
+    """
    
-#         # Convert the data row to a string representation
-#     if hasattr(data_row, 'to_dict'):
-#             data = data_row.to_dict()
-#     else:
-#             data = dict(data_row)
+        # Convert the data row to a string representation
+    if hasattr(data_row, 'to_dict'):
+            data = data_row.to_dict()
+    else:
+            data = dict(data_row)
             
-#         # Format the prompt for the LLM
-#     prompt = f"""
-#         The following network metrics have exceeded their threshold values:
+        # Format the prompt for the LLM
+    prompt = f"""
+        The following network metrics have exceeded their threshold values:
         
-#         Timestamp: {data.get('recorded_at')}
-#         Region: {data.get('Region', 'Unknown')}
-#         Node: {data.get('Node', 'Unknown')}
+        Timestamp: {data.get('recorded_at')}
+        Region: {data.get('Region', 'Unknown')}
+        Node: {data.get('Node', 'Unknown')}
         
-#         Metrics:
-#         - Fiber Utilization: {data.get('Fiber_Utilization', 'N/A')}%
-#         - Latency: {data.get('Latency_ms', 'N/A')} ms
-#         - Signal Strength: {data.get('ONT_OLT_Signal_Strength', 'N/A')}
-#         - Noise: {data.get('Noise_dB', 'N/A')} dB
+        Metrics:
+        - Fiber Utilization: {data.get('Fiber_Utilization', 'N/A')}%
+        - Latency: {data.get('Latency_ms', 'N/A')} ms
+        - Signal Strength: {data.get('ONT_OLT_Signal_Strength', 'N/A')}
+        - Noise: {data.get('Noise_dB', 'N/A')} dB
         
-#         Issue Type: {data.get('Issue_Type', 'Unknown')}
-#         Weather Condition: {data.get('Weather', 'Unknown')}
-#         Service Type: {data.get('Service', 'Unknown')}
+        Issue Type: {data.get('Issue_Type', 'Unknown')}
+        Weather Condition: {data.get('Weather', 'Unknown')}
+        Service Type: {data.get('Service', 'Unknown')}
         
-#         Based on these metrics and conditions, please provide:
-#         1. A diagnosis of the likely network issue
-#         2. Recommended troubleshooting steps
-#         3. Potential solutions to resolve the issue
-#         """
+        Based on these metrics and conditions, please provide:
+        1. A diagnosis of the likely network issue
+        2. Recommended troubleshooting steps
+        3. Potential solutions to resolve the issue
+        """
         
-#     response =  groq_client.chat.completions.create(
-#         messages=[
-#             {"role": "system", "content": "you are a Telecom expert assistant."},
-#             {"role": "user", "content": prompt}
-#         ],
-#         model="llama-3.3-70b-versatile",
-#         temperature=0.5,
-#         max_completion_tokens=1024,
-#         top_p=1,
-#         stream=False,
-#     )
-#     return "\n".join(response.choices[0].message.content.splitlines()[:2])
+    response =  groq_client.chat.completions.create(
+        messages=[
+            {"role": "system", "content": "you are a Telecom expert assistant."},
+            {"role": "user", "content": prompt}
+        ],
+        model="llama-3.3-70b-versatile",
+        temperature=0.5,
+        max_completion_tokens=1024,
+        top_p=1,
+        stream=False,
+    )
+    return "\n".join(response.choices[0].message.content.splitlines()[:2])
 
 
 
