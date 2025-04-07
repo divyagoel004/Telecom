@@ -178,7 +178,7 @@ def generate_llm_solution(data_row):
         top_p=1,
         stream=False,
     )
-    return "\n".join(chat_completion.choices[0].message.content.splitlines()[:2])
+    return "\n".join(response.choices[0].message.content.splitlines()[:2])
 
 
 
