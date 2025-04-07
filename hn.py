@@ -36,7 +36,16 @@ except ImportError:
     st.warning("Groq and Together modules not found; voice-to-SQL features may not work.")
 
 
-
+st.markdown("""
+<style>
+.insight-btn {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    z-index: 999;
+}
+</style>
+""", unsafe_allow_html=True)
 # username = "postgres"
 # password = urllib.parse.quote_plus("Az@di1947")  # URL-encode special chars
 # engine = create_engine(f"postgresql://{username}:{password}@localhost:5432/telecom")
@@ -966,26 +975,17 @@ with st.container():
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-
-# Create Tabs for different KPI categories
-tabs = st.tabs(["Network Health KPIs", "Customer Experience KPIs", "Operational KPIs", "Comprehensive Overview", "Voice SQL Dashboard"])
-# Add this CSS at the top after imports
-st.markdown("""
-<style>
-.insight-btn {
-    position: fixed;
-    right: 20px;
-    top: 20px;
-    z-index: 999;
-}
-</style>
-""", unsafe_allow_html=True)
-
-# Add this in your header section
 st.markdown('<div class="insight-btn">', unsafe_allow_html=True)
 if st.button("📊 Insight Analysis"):
     st.session_state.show_insight = not st.session_state.get('show_insight', False)
 st.markdown('</div>', unsafe_allow_html=True)
+# Create Tabs for different KPI categories
+tabs = st.tabs(["Network Health KPIs", "Customer Experience KPIs", "Operational KPIs", "Comprehensive Overview", "Voice SQL Dashboard"])
+# Add this CSS at the top after imports
+
+
+# Add this in your header section
+
 
 # Add this function definition in the main code
 def get_instruction(metric, snippet):
