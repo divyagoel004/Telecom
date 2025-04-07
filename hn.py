@@ -550,6 +550,7 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
                       line=dict(width=4, color='#9467bd'),
                       marker=dict(size=8))
     return fig
+
 def update_packet_loss(time_range, region_val, node_val, fiber_val,
                        issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
