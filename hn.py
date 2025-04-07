@@ -138,13 +138,13 @@ def generate_llm_solution(data_row):
     """
    
         # Convert the data row to a string representation
-        if hasattr(data_row, 'to_dict'):
+ if hasattr(data_row, 'to_dict'):
             data = data_row.to_dict()
-        else:
+ else:
             data = dict(data_row)
             
         # Format the prompt for the LLM
-        prompt = f"""
+ prompt = f"""
         The following network metrics have exceeded their threshold values:
         
         Timestamp: {data.get('recorded_at')}
@@ -167,7 +167,7 @@ def generate_llm_solution(data_row):
         3. Potential solutions to resolve the issue
         """
         
-        response =  groq_client.chat.completions.create(
+ response =  groq_client.chat.completions.create(
         messages=[
             {"role": "system", "content": "you are a Telecom expert assistant."},
             {"role": "user", "content": prompt}
@@ -178,7 +178,7 @@ def generate_llm_solution(data_row):
         top_p=1,
         stream=False,
     )
-        return chat_completion.choices[0].message.content[100]
+ return chat_completion.choices[0].message.content[100]
 
 
 def add_threshold_click_behavior(fig, df, y_column, threshold_value):
