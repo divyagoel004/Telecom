@@ -987,10 +987,10 @@ tabs = st.tabs(["Network Health KPIs", "Customer Experience KPIs", "Operational 
 def get_instruction(metric, snippet):
     metric_display = metric.replace('_', ' ').title()
     return (
-      f"For {metric_display} CSV: {snippet}\n"
+      f"For {metric_display} CSV: {snippet}\n extract the first spike in data and then"
        "Please provide the answer in exactly two parts without any extra paragraphs or commentary.\n"
-       "1. Direct Root Cause (a brief sentence):\n"
-       "2. Direct Solution (a brief sentence):\n"
+       "1.  Root Cause (a brief sentence):\n"
+       "2.  Solution (a brief sentence):\n"
 
 
     )
@@ -1027,7 +1027,7 @@ if st.session_state.get('show_insight', False):
 
         # Generate analysis
         data=transform_data()
-        csv_snippet = data.head(10).to_csv(index=False)
+        csv_snippet = data.head(100).to_csv(index=False)
         instruction = get_instruction(selected_option, csv_snippet)
         
         try:
