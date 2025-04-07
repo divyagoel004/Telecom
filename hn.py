@@ -1028,15 +1028,18 @@ if st.session_state.get('show_insight', False):
         instruction = get_instruction(selected_option, csv_snippet)
         
         try:
-            chat_completion = groq_client.chat.completions.create(
-                messages=[
+                      
+            
+            client = Together()
+            
+            response = together_client.chat.completions.create(
+                model="meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",
+                messages=[   
                     {"role": "system", "content": "You are a Telecom expert assistant."},
                     {"role": "user", "content": instruction}
                 ],
-                model="llama3-70b-8192",
-                temperature=0.5,
-                max_tokens=1024
             )
+                        
             st.markdown("#### Analysis Results")
             st.write(chat_completion.choices[0].message.content)
             
