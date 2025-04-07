@@ -1030,7 +1030,9 @@ if st.session_state.get('show_insight', False):
         selected_option = display_to_metric[selected_display]
 
         # Generate analysis
-        csv_snippet = df.head(10).to_csv(index=False)
+        filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
+                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
+        csv_snippet = filtered.head(10).to_csv(index=False)
         instruction = get_instruction(selected_option, csv_snippet)
         
         try:
