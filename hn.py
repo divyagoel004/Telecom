@@ -1033,7 +1033,7 @@ if st.session_state.get('show_insight', False):
                     {"role": "system", "content": "You are a Telecom expert assistant."},
                     {"role": "user", "content": instruction}
                 ],
-                model="llama-3.3-70b-versatile",
+                model="llama3-70b-8192",
                 temperature=0.5,
                 max_tokens=1024
             )
