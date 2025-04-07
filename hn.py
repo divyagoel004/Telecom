@@ -551,6 +551,7 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
     fig.update_traces(mode="lines+markers", 
                       line=dict(width=4, color='#9467bd'),
                       marker=dict(size=8))
+    fig = add_threshold_click_behavior(fig, filtered, "Fiber_Utilization", threshold_value)
     return fig
 
 def update_packet_loss(time_range, region_val, node_val, fiber_val,
@@ -659,7 +660,7 @@ def update_uptime(time_range, region_val, node_val, fiber_val,
     # Compute average uptime from the filtered DataFrame
     fig = px.bar(filtered, x="recorded_at", y="Uptime_Performance",
                   labels={"recorded_at": "Time", "Uptime_Performance": "Uptime_Performance (ms)"})
-    fig = add_threshold_click_behavior(fig, filtered, "Fiber_Utilization", threshold_value)
+    
     
     return fig
     
