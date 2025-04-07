@@ -144,6 +144,7 @@ def generate_llm_solution(data_row):
             data = dict(data_row)
             
         # Format the prompt for the LLM
+    client=Groq(api_key=os.getenv("GROQ_API_KEY"))
     prompt = f"""
         The following network metrics have exceeded their threshold values:
         
@@ -167,7 +168,7 @@ def generate_llm_solution(data_row):
         3. Potential solutions to resolve the issue
         """
         
-    response =  groq_client.chat.completions.create(
+    response = client.chat.completions.create(
         messages=[
             {"role": "system", "content": "you are a Telecom expert assistant."},
             {"role": "user", "content": prompt}
