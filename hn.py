@@ -989,14 +989,9 @@ def get_instruction(metric, snippet):
     return (
         "The CSV file contains network measurement data related to synthetic fiber with truckroll data. "
         f"Please analyze the snippet below and provide your analysis in two main sections with the metric '{metric_display}' in focus:\n\n"
-        "• Cause:\n"
-        f"  - Identify the underlying factors affecting {metric_display}.\n"
-        "  - List the key reasons as bullet points.\n\n"
-        "• Solution:\n"
-        f"  - Provide corresponding solutions to address the issues affecting {metric_display}.\n"
-        "  - List the recommended actions as bullet points.\n\n"
-        f"CSV snippet:\n{snippet}\n\n"
-        "Focus your analysis on the provided data."
+       
+        f"Analyze the CSV snippet below. Focus on the first spike in {metric_display}. Identify its root cause and propose a concise, specific solution. Use as few tokens as possible. CSV snippet:\n{snippet}"
+       
     )
 
 # Add this conditional sidebar content at the end of the main code
@@ -1032,7 +1027,7 @@ if st.session_state.get('show_insight', False):
         # Generate analysis
         filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                 issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
-        csv_snippet = filtered.head(10).to_csv(index=False)
+        csv_snippet = filtered.to_csv(index=False)
         instruction = get_instruction(selected_option, csv_snippet)
         
         try:
