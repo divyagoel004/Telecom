@@ -989,6 +989,7 @@ def get_instruction(metric, snippet):
     return (
       f"For {metric_display} CSV: {snippet}
 Identify first spike, root cause, and solution.
+return the direct root cause , spike data  and solution , don't add extra data
 Minimal tokens."
     )
 
