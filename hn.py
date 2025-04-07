@@ -659,6 +659,7 @@ def update_uptime(time_range, region_val, node_val, fiber_val,
     # Compute average uptime from the filtered DataFrame
     fig = px.bar(filtered, x="recorded_at", y="Uptime_Performance",
                   labels={"recorded_at": "Time", "Uptime_Performance": "Uptime_Performance (ms)"})
+    fig = add_threshold_click_behavior(fig, filtered, "Fiber_Utilization", threshold_value)
     
     return fig
     
