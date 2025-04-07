@@ -987,10 +987,8 @@ tabs = st.tabs(["Network Health KPIs", "Customer Experience KPIs", "Operational 
 def get_instruction(metric, snippet):
     metric_display = metric.replace('_', ' ').title()
     return (
-      f"For {metric_display} CSV: {snippet}
-Identify first spike, root cause, and solution.
-return the direct root cause , spike data  and solution , don't add extra data
-Minimal tokens."
+      f"For {metric_display} CSV: {snippet}\nRoot Cause:\n{{root_cause}}\nSolution:\n{{solution}}"
+
     )
 
 # Add this conditional sidebar content at the end of the main code
