@@ -541,6 +541,7 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
     fig = px.line(filtered, x="recorded_at", y="Fiber_Utilization",
                        labels={"recorded_at": "Time", "Fiber_Utilization_Rate": "Utilization (%)"})
     threshold_value = 80
+
     # Add a horizontal threshold line
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
               annotation_text=f"Threshold ({threshold_value}%)", 
@@ -548,12 +549,7 @@ def update_fiber_util(time_range, region_val, node_val, fiber_val,
     fig.update_traces(mode="lines+markers", 
                       line=dict(width=4, color='#9467bd'),
                       marker=dict(size=8))
-    
-    # Add threshold click behavior
-    fig = add_threshold_click_behavior(fig, filtered, "Fiber_Utilization", threshold_value)
-    
     return fig
-
 def update_packet_loss(time_range, region_val, node_val, fiber_val,
                        issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val):
     filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
