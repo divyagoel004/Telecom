@@ -178,7 +178,8 @@ def generate_llm_solution(data_row):
         top_p=1,
         stream=False,
     )
-    return chat_completion.choices[0].message.content[100]
+    return "\n".join(chat_completion.choices[0].message.content.splitlines()[:2])
+
 
 
 def add_threshold_click_behavior(fig, df, y_column, threshold_value):
