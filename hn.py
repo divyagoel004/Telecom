@@ -13,6 +13,7 @@ from streamlit_plotly_events import plotly_events
 from http.server import BaseHTTPRequestHandler
 import streamlit as st
 import pytz
+import requests
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from streamlit_mic_recorder import speech_to_text
