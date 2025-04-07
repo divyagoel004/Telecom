@@ -1024,7 +1024,7 @@ if st.session_state.get('show_insight', False):
         # Generate analysis
         filtered = get_filtered_df(time_range, region_val, node_val, fiber_val,
                                 issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
-        csv_snippet = filtered.to_csv(index=False)
+        csv_snippet = data.head(100).to_csv(index=False)
         instruction = get_instruction(selected_option, csv_snippet)
         
         try:
