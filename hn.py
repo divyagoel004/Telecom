@@ -40,7 +40,7 @@ st.markdown("""
 <style>
 .insight-btn {
     position: fixed;
-    right: 20px;
+    right: 200px;
     top: 20px;
     z-index: 999;
 }
