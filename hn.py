@@ -569,14 +569,14 @@ def update_latency(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
         fig = go.Figure()
-        fig.update_layout(title="No data available")
+        fig.update_layout(title="No data available for Latency")
         return fig
     fig = px.line(filtered, x="recorded_at", y="Latency_ms",
                   labels={"recorded_at": "Time", "Latency_ms": "Latency (ms)"})
     threshold_value = 75
     # Add a horizontal threshold line
     fig.add_hline(y=threshold_value, line_dash="dash", line_color="red", 
-                  annotation_text=f"Threshold ({threshold_value})", 
+                  annotation_text=f"Threshold ({threshold_value} ms)", 
                   annotation_position="top right")
     fig.update_traces(mode="lines+markers", 
                       line=dict(width=4, color='#2ca02c'),
@@ -589,37 +589,34 @@ def update_signal(time_range, region_val, node_val, fiber_val,
                                issue_val, tech_val, sla_val, weather_val, service_val, truck_roll_val)
     if filtered.empty:
         fig = go.Figure()
-        fig.update_layout(title="No data available")
+        fig.update_layout(title="No data available for Signal")
         return fig
 
     fig = make_subplots(specs=[[{"secondary_y": True}]])
-
-
+    # Primary y-axis trace for Signal Strength
     fig.add_trace(
         go.Scatter(
-                x=filtered['recorded_at'], 
-                y=filtered['ONT_OLT_Signal_Strength'], 
-                mode='lines+markers',
-                name='Signal Strength',
-                line=dict(color='blue')
+            x=filtered['recorded_at'], 
+            y=filtered['ONT_OLT_Signal_Strength'], 
+            mode='lines+markers',
+            name='Signal Strength',
+            line=dict(color='blue')
         ),
         secondary_y=False
     )
-
-    # Add a trace for noise on the secondary y-axis
+    # Secondary y-axis trace for Noise
     fig.add_trace(
         go.Scatter(
             x=filtered['recorded_at'], 
             y=filtered['Noise_dB'], 
-             mode='lines+markers',
+            mode='lines+markers',
             name='Noise',
             line=dict(color='red')
         ),
         secondary_y=True
     )
-    signal_threshold = 5   # Example threshold for Signal Strength on primary y-axis
-    noise_threshold = 2      # Example threshold for Noise on secondary y-axis
-
+    signal_threshold = 5   # Example threshold for Signal Strength
+    noise_threshold = 2    # Example threshold for Noise
     # Add threshold line for Signal Strength
     fig.add_hline(
         y=signal_threshold, 
@@ -629,7 +626,6 @@ def update_signal(time_range, region_val, node_val, fiber_val,
         annotation_position="top left",
         secondary_y=False
     )
-
     # Add threshold line for Noise
     fig.add_hline(
         y=noise_threshold, 
@@ -639,15 +635,13 @@ def update_signal(time_range, region_val, node_val, fiber_val,
         annotation_position="top right",
         secondary_y=True
     )
-    # Update layout and axis titles
     fig.update_layout(
-            title="Dual Axis Chart: Signal Strength and Noise",
-            xaxis_title="Recorded At",
-            legend=dict(x=0.05, y=0.95)
+        title="Dual Axis Chart: Signal Strength and Noise",
+        xaxis_title="Recorded At",
+        legend=dict(x=0.05, y=0.95)
     )
     fig.update_yaxes(title_text="Signal Strength", secondary_y=False)
     fig.update_yaxes(title_text="Noise", secondary_y=True)
-
     return fig
 
 def update_uptime(time_range, region_val, node_val, fiber_val,
