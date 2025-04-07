@@ -136,7 +136,7 @@ def generate_llm_solution(data_row):
     Returns:
         str: Generated solution or error message
     """
-    try:
+   
         # Convert the data row to a string representation
         if hasattr(data_row, 'to_dict'):
             data = data_row.to_dict()
@@ -178,7 +178,7 @@ def generate_llm_solution(data_row):
         top_p=1,
         stream=False,
     )
-    return chat_completion.choices[0].message.content[100]
+        return chat_completion.choices[0].message.content[100]
 
 
 def add_threshold_click_behavior(fig, df, y_column, threshold_value):
