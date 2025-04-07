@@ -212,22 +212,32 @@ def generate_llm_solution(data_row):
 
 def add_threshold_click_behavior(fig, df, y_column, threshold_value):
     """
-    Add click behavior to show LLM solutions when threshold is crossed
-    
+    Add click behavior to show LLM solutions when threshold is crossed.
+    This version precomputes the LLM-generated solution for each threshold violation
+    and sets it as the hovertext for that marker.
+
     Args:
         fig: Plotly figure object
         df: Dataframe with the data
         y_column: The column name being plotted on y-axis
         threshold_value: The threshold value for this metric
-        
+
     Returns:
-        Updated figure with click behavior
+        Updated figure with hovertext containing LLM solutions.
     """
     # Filter points where the value exceeds the threshold
     threshold_exceeded = df[df[y_column] > threshold_value]
     
     if not threshold_exceeded.empty:
-        # Add markers for threshold violations
+        # Precompute LLM solution for each row that violates the threshold
+        hovertexts = []
+        for idx, row in threshold_exceeded.iterrows():
+            solution = generate_llm_solution(row)
+            # You can format or truncate the solution if needed for hovertext display
+            hovertext = f"Threshold Violated<br>{y_column}: {row[y_column]}<br>Solution: {solution}"
+            hovertexts.append(hovertext)
+        
+        # Add markers for threshold violations with the computed hovertexts
         fig.add_trace(
             go.Scatter(
                 x=threshold_exceeded['recorded_at'],
@@ -241,17 +251,12 @@ def add_threshold_click_behavior(fig, df, y_column, threshold_value):
                 ),
                 name='Threshold Violated',
                 hoverinfo='text',
-                hovertext=[f"Threshold Violated<br>Click for solution<br>{y_column}: {val}" 
-                          for val in threshold_exceeded[y_column]],
+                hovertext=hovertexts,
                 customdata=threshold_exceeded.index.tolist()
             )
         )
         
-        # Store the dataframe as a hidden div for access in callback
-        # This would need to be implemented differently based on your framework (Dash, Streamlit, etc.)
-        # For demonstration, we'll use fig.data attributes to store this information
-        
-        # Update layout for click events
+        # Update layout to encourage users to hover over the markers
         fig.update_layout(
             clickmode='event+select',
             annotations=[
@@ -260,7 +265,7 @@ def add_threshold_click_behavior(fig, df, y_column, threshold_value):
                     y=1.05,
                     xref="paper",
                     yref="paper",
-                    text="Click on red markers to see AI-generated solutions",
+                    text="Hover on red markers to see AI-generated solutions",
                     showarrow=False,
                     font=dict(size=12)
                 )
@@ -268,7 +273,6 @@ def add_threshold_click_behavior(fig, df, y_column, threshold_value):
         )
     
     return fig
-
 
 
 def generate_sql(query):
