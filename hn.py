@@ -38,14 +38,31 @@ except ImportError:
 
 st.markdown("""
 <style>
-.insight-btn {
+/* Move sidebar to the right */
+[data-testid="stSidebar"] {
     position: fixed;
-    right: 200px;
-    top: 20px;
-    z-index: 999;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 400px !important; /* Increased width */
+    z-index: 100;
+    border-left: 2px solid #ddd;
+    border-right: none;
+    background-color: #f9f9f9;
+}
+
+/* Push main content to the left to make room for sidebar */
+.css-18ni7ap.e8zbici2 {
+    margin-right: 420px; /* Adjust according to sidebar width */
+}
+
+/* Hide the default left sidebar anchor */
+.css-1d391kg {
+    display: none;
 }
 </style>
 """, unsafe_allow_html=True)
+
 # username = "postgres"
 # password = urllib.parse.quote_plus("Az@di1947")  # URL-encode special chars
 # engine = create_engine(f"postgresql://{username}:{password}@localhost:5432/telecom")
