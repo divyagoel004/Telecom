@@ -190,18 +190,17 @@ def generate_llm_solution(data_row):
                 
         except Exception as e:
             # Using Grok API as fallback
-            response = requests.post(
-                "https://api.grok.ai/v1/chat/completions",
-                headers={
-                    "Authorization": "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",
-                    "Content-Type": "application/json"
-                },
-                json={
-                    "messages": [{"role": "user", "content": prompt}],
-                    "max_tokens": 500,
-                    "temperature": 0.7
-                }
-            )
+            response = = client.chat.completions.create(
+        messages=[
+            {"role": "system", "content": "you are a Telecom expert assistant."},
+            {"role": "user", "content": prompt}
+        ],
+        model="llama-3.3-70b-versatile",
+        temperature=0.5,
+        max_completion_tokens=1024,
+        top_p=1,
+        stream=False,
+    )
             if response.status_code == 200:
                 return response.json()["choices"][0]["message"]["content"].strip()
             else:
