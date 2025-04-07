@@ -25,7 +25,7 @@ st.set_page_config(
 
 # -------------------- Environment & Data Setup --------------------
 load_dotenv()
-os.environ["GROQ_API_KEY"] = "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"
+os.environ["GROQ_API_KEY"] = "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"
 try:
     from groq import Groq
     from together import Together
@@ -36,32 +36,7 @@ except ImportError:
     st.warning("Groq and Together modules not found; voice-to-SQL features may not work.")
 
 
-st.markdown("""
-<style>
-/* Move sidebar to the right */
-[data-testid="stSidebar"] {
-    position: fixed;
-    top: 0;
-    right: 0;
-    height: 100vh;
-    width: 400px !important; /* Increased width */
-    z-index: 100;
-    border-left: 2px solid #ddd;
-    border-right: none;
-    background-color: #f9f9f9;
-}
 
-/* Push main content to the left to make room for sidebar */
-.css-18ni7ap.e8zbici2 {
-    margin-right: 420px; /* Adjust according to sidebar width */
-}
-
-/* Hide the default left sidebar anchor */
-.css-1d391kg {
-    display: none;
-}
-</style>
-""", unsafe_allow_html=True)
 # username = "postgres"
 # password = urllib.parse.quote_plus("Az@di1947")  # URL-encode special chars
 # engine = create_engine(f"postgresql://{username}:{password}@localhost:5432/telecom")
@@ -842,77 +817,9 @@ with st.container():
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-st.markdown('<div class="insight-btn">', unsafe_allow_html=True)
-if st.button("📊 Data Insight and there Analysis"):
-    st.session_state.show_insight = not st.session_state.get('show_insight', False)
-st.markdown('</div>', unsafe_allow_html=True)
+
 # Create Tabs for different KPI categories
 tabs = st.tabs(["Network Health KPIs", "Customer Experience KPIs", "Operational KPIs", "Comprehensive Overview", "Voice SQL Dashboard"])
-def get_instruction(metric, snippet):
-    metric_display = metric.replace('_', ' ').title()
-    return (
-        "The CSV file contains network measurement data related to synthetic fiber with truckroll data. "
-        f"Please analyze the snippet below and provide your analysis in two main sections with the metric '{metric_display}' in focus:\n\n"
-        "• Cause:\n"
-        f"  - Identify the underlying factors affecting {metric_display}.\n"
-        "  - List the key reasons as bullet points.\n\n"
-        "• Solution:\n"
-        f"  - Provide corresponding solutions to address the issues affecting {metric_display}.\n"
-        "  - List the recommended actions as bullet points.\n\n"
-        f"CSV snippet:\n{snippet}\n\n"
-        "Focus your analysis on the provided data."
-    )
-
-# Add this conditional sidebar content at the end of the main code
-if st.session_state.get('show_insight', False):
-    with st.sidebar:
-        st.markdown("<h1 style='text-align: center; color: #2E86C1;'>📊 Insight Analysis</h1>", unsafe_allow_html=True)
-        
-        # Metric selection
-        metric_display_names = {
-            "Packet_Loss_Percent": "📉 Packet Loss (%)",
-            "Customer_Satisfaction_Score": "😊 Customer Satisfaction",
-            "Truck_Roll_Requirement": "🚚 Truck Roll Requirement",
-            "Signal_Degradation_Rate_Percent": "📶 Signal Degradation (%)",
-            "Churn_Ratio": "🔁 Customer Churn Ratio",
-            "Fiber_Utilization_Rate": "📈 Fiber Utilization Rate",
-            "Customer_SLA_Priority": "🏷️ SLA Priority Level",
-            "Customer_Complaints": "📞 Customer Complaints",
-            "Power_Supply_Stability": "🔋 Power Supply Stability",
-            "Avg_Downtime_per_Fault_min": "⏱️ Avg Downtime per Fault (min)",
-            "Recent_Fiber_Breaks": "⚡ Recent Fiber Breaks",
-            "Latency_ms": "⌛ Network Latency (ms)",
-            "Optical_Loss_dB": "🔦 Optical Signal Loss (dB)",
-        }
-        
-        display_to_metric = {v: k for k, v in metric_display_names.items()}
-        selected_display = st.radio(
-            "Select Metric:",
-            options=list(metric_display_names.values()),
-            index=0
-        )
-        selected_option = display_to_metric[selected_display]
-
-        # Generate analysis
-        csv_snippet = df.head(10).to_csv(index=False)
-        instruction = get_instruction(selected_option, csv_snippet)
-        
-        try:
-            chat_completion = groq_client.chat.completions.create(
-                messages=[
-                    {"role": "system", "content": "You are a Telecom expert assistant."},
-                    {"role": "user", "content": instruction}
-                ],
-                model="llama3-70b-8192",
-                temperature=0.5,
-                max_tokens=1024
-            )
-            st.markdown("#### Analysis Results")
-            st.write(chat_completion.choices[0].message.content)
-            
-        except Exception as e:
-            st.error(f"Analysis error: {str(e)}")
-# 
 
 # -------------------- Network Health KPIs Tab --------------------
 with tabs[0]:
