@@ -26,7 +26,7 @@ st.set_page_config(
 
 # -------------------- Environment & Data Setup --------------------
 load_dotenv()
-os.environ["GROQ_API_KEY"]= "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"
+os.environ["GROQ_API_KEY"]= "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"
 try:
     from groq import Groq
     from together import Together
