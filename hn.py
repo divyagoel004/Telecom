@@ -82,6 +82,7 @@ GRAPH_TYPES = [
 ]
 
 # -------------------- Load Synthetic Data --------------------
+@st.cache_data(ttl=3600)
 def transform_data(force=True):
     # """
     # Query KPI data from the database.
